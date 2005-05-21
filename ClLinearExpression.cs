@@ -281,7 +281,6 @@ namespace Cassowary
 		/// if this expression is constant -- signal ExCLInternalError in
 		/// that case).  Return null if no pivotable variables
 		/// </summary>
-		/// <returns></returns>
 		public /*sealed*/ ClAbstractVariable AnyPivotableVariable() /*throws ExCLInternalError*/
 		{
 			if (IsConstant)
