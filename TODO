@@ -1,3 +1,7 @@
 Classes:
-	- ClConstraint
 	- ClEditOrStayConstraint
+	- ClEditConstraint
+	- ClEditInfo
+	- ClStayConstraint
+	- ClObjectiveVariable
+	- ClSlackVariable
