@@ -1,4 +1,3 @@
 Classes:
-	- ClLinearExpression
 	- ClConstraint
 	- ClEditOrStayConstraint
