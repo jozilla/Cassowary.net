@@ -5,7 +5,7 @@ namespace Cassowary
 	/// <summary>
 	/// Cassowary test class.
 	/// </summary>
-	class ClTests
+	public class ClTests
 	{
 		/// <summary>
 		/// The main entry point for the application.
