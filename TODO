@@ -1,3 +1,2 @@
 Classes:
-	- ClLinearInequality
 	- ClSimplexSolver
