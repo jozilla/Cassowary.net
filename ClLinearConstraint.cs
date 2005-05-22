@@ -2,7 +2,7 @@ using System;
 
 namespace Cassowary
 {
-	class ClLinearConstraint : ClConstraint
+	public class ClLinearConstraint : ClConstraint
 	{
 		public ClLinearConstraint(ClLinearExpression cle,
 															ClStrength strength, 
