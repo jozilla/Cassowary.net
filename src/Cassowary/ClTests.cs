@@ -13,6 +13,7 @@ namespace Cassowary
 		[STAThread]
 		static void Main(string[] args)
 		{
+						Console.WriteLine("Nothing to see here (yet)...");
 		}
 	}
 }
