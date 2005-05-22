@@ -1,5 +1,4 @@
 Classes:
-	- ClLinearConstraint
 	- ClLinearEquation
 	- ClLinearInequality
 	- ClSimplexSolver
