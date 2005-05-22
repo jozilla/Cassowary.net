@@ -27,22 +27,22 @@ namespace Cassowary
 			get;
 		}
 
-		public bool IsEditConstraint
+		public virtual bool IsEditConstraint
 		{
 			get { return false; }
 		}
 
-		public bool IsInequality
+		public virtual bool IsInequality
 		{
 			get { return false; }
 		}
 
-		public bool IsRequired
+		public virtual bool IsRequired
 		{
 			get { return _strength.IsRequired; } 
 		}
 
-		public bool IsStayConstraint
+		public virtual bool IsStayConstraint
 		{
 			get { return false; }
 		}
