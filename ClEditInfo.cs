@@ -10,7 +10,7 @@ namespace Cassowary
 	/// the parallel vectors of error variables and previous edit
 	/// constants from the Smalltalk version of the code.
 	/// </summary>
-	public class ClEditInfo
+	class ClEditInfo
 	{
 		public ClEditInfo(ClConstraint cn, ClSlackVariable eplus, 
 											ClSlackVariable eminus, double prevEditConstant,

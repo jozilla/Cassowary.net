@@ -2,7 +2,7 @@ using System;
 
 namespace Cassowary
 {
-	public class ClObjectiveVariable : ClAbstractVariable
+	class ClObjectiveVariable : ClAbstractVariable
 	{
 		public ClObjectiveVariable(string name) : base(name)
 		{}

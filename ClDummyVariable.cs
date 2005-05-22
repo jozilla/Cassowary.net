@@ -2,7 +2,7 @@ using System;
 
 namespace Cassowary.net
 {
-	public class ClDummyVariable : ClAbstractVariable
+	class ClDummyVariable : ClAbstractVariable
 	{
 		public ClDummyVariable(string name) : base(name)
 		{}

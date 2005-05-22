@@ -118,7 +118,6 @@ namespace Cassowary
 		public bool LessThan(ClSymbolicWeight clsw1)
 		{
 			// Assert(clsw1.CLevels == CLevels);
-			ClSymbolicWeight clsw = (ClSymbolicWeight) Clone();
 
 			for (int i = 0; i < _values.Length; i++)
 			{
@@ -134,7 +133,6 @@ namespace Cassowary
 		public bool LessThanOrEqual(ClSymbolicWeight clsw1)
 		{
 			// Assert(clsw1.CLevels == CLevels);
-			ClSymbolicWeight clsw = (ClSymbolicWeight) Clone();
 
 			for (int i = 0; i < _values.Length; i++)
 			{

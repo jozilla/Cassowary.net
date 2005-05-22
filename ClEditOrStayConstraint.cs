@@ -2,7 +2,7 @@ using System;
 
 namespace Cassowary
 {
-	public class ClEditOrStayConstraint : ClConstraint
+	public abstract class ClEditOrStayConstraint : ClConstraint
 	{
 		public ClEditOrStayConstraint(ClVariable var, 
 																	ClStrength strength, 

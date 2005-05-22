@@ -2,7 +2,7 @@ using System;
 
 namespace Cassowary
 {
-	public class ClSlackVariable : ClAbstractVariable
+	class ClSlackVariable : ClAbstractVariable
 	{
 		public ClSlackVariable(string name) : base(name)
 		{}
