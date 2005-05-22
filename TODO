@@ -1,2 +1,5 @@
 Classes:
-	- ClObjectiveVariable
+	- ClLinearConstraint
+	- ClLinearEquation
+	- ClLinearInequality
+	- ClSimplexSolver
