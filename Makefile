@@ -9,7 +9,7 @@ all: lib test
 lib:
 	mcs -warn:4 -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 test:
-	mcs -warn:4 -target:exe -out:ClTests.exe ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
+	mcs -warn:4 -target:exe -main:ClTests -out:ClTests.exe ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs ${SRC_DIR}/Tests/*.cs
 
 clean:
 	rm *.exe 

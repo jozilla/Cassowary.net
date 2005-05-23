@@ -1,6 +1,6 @@
 using System;
 
-namespace Cassowary
+namespace Cassowary.Tests
 {
 	/// <summary>
 	/// Cassowary test class.
