@@ -2,7 +2,7 @@
 # Requires mcs, the Mono C# compiler.
 # Author: Jo Vermeulen <jo@lumumba.uhasselt.be>
 
-SRC_DIR = Cassowary/
+SRC_DIR = Cassowary
 
 all: test
 
