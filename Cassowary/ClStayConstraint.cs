@@ -2,13 +2,13 @@ using System;
 
 namespace Cassowary
 {
-	public class ClStrayConstraint : ClEditOrStayConstraint
+	public class ClStayConstraint : ClEditOrStayConstraint
 	{
-		public ClStrayConstraint(ClVariable var, ClStrength strength, double weight) 
+		public ClStayConstraint(ClVariable var, ClStrength strength, double weight) 
 			: base(var, strength, weight)
 		{}
 
-		public ClStrayConstraint(ClVariable var, ClStrength strength)
+		public ClStayConstraint(ClVariable var, ClStrength strength)
 			: base(var, strength, 1.0)
 		{}
 
