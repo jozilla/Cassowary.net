@@ -17,40 +17,35 @@ namespace Cassowary
 			return new ClDouble(_value); 
 		}
 
-		public /*sealed*/ int intValue()
-        { 
-			return (int) _value; 
+		public /*sealed*/ int IntValue
+    { 
+			get { return (int) _value; }
 		}
 
-		public /*sealed*/ long longValue()
+		public /*sealed*/ long LongValue
 		{ 
-			return (long) _value; 
+			get { return (long) _value; }
 		}
 
-		public /*sealed*/ float floatValue()
+		public /*sealed*/ float FloatValue
 		{ 
-			return (float) _value; 
+			get { return (float) _value; }
 		}
 
-		public /*sealed*/ byte byteValue()
-        { 
-			return (byte) _value; 
+		public /*sealed*/ byte ByteValue
+		{ 
+			get { return (byte) _value; }
 		}
 
-		public /*sealed*/ short shortValue()
-        { 
-			return (short) _value; 
+		public /*sealed*/ short ShortValue
+		{
+			get { return (short) _value; }
 		}
 
 		public /*sealed*/ double Value
-        {
-			get {
-				return _value;
-			}
-			set {
-				_value = value; 
-			}
-			
+		{
+			get { return _value; }
+			set { _value = value; }
 		}
 
 		public override sealed String ToString()
@@ -72,7 +67,7 @@ namespace Cassowary
 
 		public override sealed int GetHashCode()
 		{ 
-			Console.Error.WriteLine("ClDouble.hashCode() called!");
+			Console.Error.WriteLine("ClDouble.GetHashCode() called!");
 			return _value.GetHashCode();
 		}
 
