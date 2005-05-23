@@ -224,7 +224,7 @@ namespace Cassowary
 
 		public /*sealed*/ ClLinearExpression SetVariable(ClAbstractVariable v, double c)
 		{ 
-			//Assert(c != 0.0);
+			// Assert(c != 0.0);
 			ClDouble coeff = (ClDouble) _terms[v];
 			
 			if (coeff != null) 

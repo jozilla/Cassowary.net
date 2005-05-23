@@ -7,8 +7,8 @@ namespace Cassowary
 	public class ClTableau : Cl
 	{
 		/// <summary>
-		/// Ctr is protected, since this only supports an ADT for
-		/// the ClSimplexSolved class.
+		/// Constructor is protected, since this only supports an ADT for
+		/// the ClSimplexSolver class.
 		/// </summary>
 		protected ClTableau()
 		{
@@ -20,7 +20,7 @@ namespace Cassowary
 		}
 		
 		/// <summary>
-		/// Variable v has been removed from an expression.  If the
+		/// Variable v has been removed from an expression. If the
 		/// expression is in a tableau the corresponding basic variable is
 		/// subject (or if subject is nil then it's in the objective function).
 		/// Update the column cross-indices.
@@ -48,9 +48,9 @@ namespace Cassowary
 			}
 		}
 		  
-		/// <summary>
-		/// Originally from Michael Noth <noth@cs>
-		/// </summary>
+		/// <remarks>
+		/// Originally from Michael Noth <noth@cs.washington.edu>
+		/// </remarks>
 		public string GetInternalInfo() {
 			string s = "Tableau Information:\n";
 			s += string.Format("Rows: {0} (= {1} constraints)", _rows.Count, _rows.Count - 1);
@@ -85,7 +85,7 @@ namespace Cassowary
 		/// <summary>
 		/// Convenience function to insert a variable into
 		/// the set of rows stored at _columns[param_var],
-		/// creating a new set if needed 
+		/// creating a new set if needed. 
 		/// </summary>
 		private /*sealed*/ void InsertColVar(ClAbstractVariable param_var, 
 										ClAbstractVariable rowvar)
@@ -101,8 +101,8 @@ namespace Cassowary
 		// Add v=expr to the tableau, update column cross indices
 		// v becomes a basic variable
 		// expr is now owned by ClTableau class, 
-		// and ClTableauis responsible for deleting it
-		// (also, expr better be allocated on the heap!)
+		// and ClTableau is responsible for deleting it
+		// (also, expr better be allocated on the heap!).
 		protected /*sealed*/ void AddRow(ClAbstractVariable var, ClLinearExpression expr)
 		{
 			if (cTraceOn) 
@@ -112,7 +112,7 @@ namespace Cassowary
 			// have that variable in their expression
 			_rows.Add(var, expr);
 		    
-			// HIER!!!!!
+			// FIXME: check correctness!
 			foreach (ClAbstractVariable clv in expr.Terms.Keys)
 			{
 				InsertColVar(clv, var);
@@ -163,7 +163,7 @@ namespace Cassowary
 
 		/// <summary>
 		/// Remove the basic variable v from the tableau row v=expr
-		/// Then update column cross indices
+		/// Then update column cross indices.
 		/// </summary>
 		protected /*sealed*/ ClLinearExpression RemoveRow(ClAbstractVariable var)
 			/*throws ExCLInternalError*/
@@ -176,7 +176,7 @@ namespace Cassowary
 
 			// For each variable in this expression, update
 			// the column mapping and remove the variable from the list
-			// of rows it is known to be in
+			// of rows it is known to be in.
 			foreach (ClAbstractVariable clv in expr.Terms.Keys)
 			{
 				Set varset = (Set) _columns[clv];
@@ -203,8 +203,10 @@ namespace Cassowary
 			return expr;
 		}
 
-		// Replace all occurrences of oldVar with expr, and update column cross indices
-		// oldVar should now be a basic variable
+		/// <summary> 
+		/// Replace all occurrences of oldVar with expr, and update column cross indices
+		/// oldVar should now be a basic variable.
+		/// </summary> 
 		protected /*sealed*/ void SubstituteOut(ClAbstractVariable oldVar, ClLinearExpression expr)
 		{
 			if (cTraceOn)
@@ -248,13 +250,12 @@ namespace Cassowary
 		}
 
 		/// <summary>
-		/// Return true iff the variable subject is in the columns keys 
+		/// Return true if and only if the variable subject is in the columns keys 
 		/// </summary>
 		protected /*sealed*/ bool ColumnsHasKey(ClAbstractVariable subject)
 		{ 
 			return _columns.ContainsKey(subject);
 		}
-
 
 		protected /*sealed*/ ClLinearExpression RowExpression(ClAbstractVariable v)
 		{
@@ -266,30 +267,30 @@ namespace Cassowary
 		/// _columns is a mapping from variables which occur in expressions to the
 		/// set of basic variables whose expressions contain them
 		/// i.e., it's a mapping from variables in expressions (a column) to the 
-		/// set of rows that contain them
+		/// set of rows that contain them.
 		/// </summary>
 		protected Hashtable _columns; // From ClAbstractVariable to Set of variables
 
 		/// <summary>
-		/// _rows maps basic variables to the expressions for that row in the tableau
+		/// _rows maps basic variables to the expressions for that row in the tableau.
 		/// </summary>
 		protected Hashtable _rows;    // From ClAbstractVariable to ClLinearExpression
 
 		/// <summary>
-		/// the collection of basic variables that have infeasible rows
-		/// (used when reoptimizing)
+		/// Collection of basic variables that have infeasible rows
+		/// (used when reoptimizing).
 		/// </summary>
 		protected Set _infeasibleRows; // Set of ClAbstractVariable-s
 
 		/// <summary>
-		/// the set of rows where the basic variable is external
-		/// this was added to the Java/C++ versions to reduce time in setExternalVariables()
+		/// Set of rows where the basic variable is external
+		/// this was added to the Java/C++/C# versions to reduce time in SetExternalVariables().
 		/// </summary>
 		protected Set _externalRows; // Set of ClVariable-s
 
 		/// <summary>
-		/// the set of external variables which are parametric
-		/// this was added to the Java/C++/C# versions to reduce time in setExternalVariables()
+		/// Set of external variables which are parametric
+		/// this was added to the Java/C++/C# versions to reduce time in SetExternalVariables().
 		/// </summary>
 		protected Set _externalParametricVars; // Set of ClVariable-s
 	}
