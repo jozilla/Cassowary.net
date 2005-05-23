@@ -4,8 +4,10 @@
 
 SRC_DIR = Cassowary
 
-all: test
+all: lib test
 
+lib:
+	mcs -warn:4 -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 test:
 	mcs -warn:4 -target:exe -out:ClTests.exe ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 
