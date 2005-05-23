@@ -38,7 +38,7 @@ namespace Cassowary
 			get { return _clvEditPlus; }
 		}
 
-		public ClSlackVariable ClvEditMin
+		public ClSlackVariable ClvEditMinus
 		{
 			get { return _clvEditMinus; }
 		}
