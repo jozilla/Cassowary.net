@@ -1,2 +1,23 @@
 Classes:
 	- ClSimplexSolver
+		// public interface //
+		* SetEditedValue
+		* ContainsVariable
+		* AddVar
+		* GetInternalInfo
+		* GetDebugInfo
+		* ToString
+		* ConstraintMap property
+		// encapsulated interface //
+		* AddWithArtificialVariable
+		* TryAddingDirectly
+		* ChooseSubject
+		* DeleteEditConstraint
+		* DualOptimize
+		* NewExpression
+		* Optimize
+		* Pivot
+		* ResetStayConstants
+		* SetExternalVariables
+		* InsertErrorVar
+

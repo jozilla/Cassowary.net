@@ -561,6 +561,148 @@ namespace Cassowary
 
 			return this;
 		}
+
+		/// <summary>
+		/// Re-initialize this solver from the original constraints, thus
+		/// getting rid of any accumulated numerical problems 
+		/// </summary>
+		/// <remarks>
+		/// Actually, we haven't definitely observed any such problems yet.
+		/// </remarks>
+		public void Reset()
+			/* throws ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("Reset");
+			throw new ExClInternalError("Reset not implemented");
+		}
+
+		/// <summary>
+		/// Re-solve the current collection of constraints for new values
+		/// for the constants of the edit variables.
+		/// </summary>
+		/// <remarks>
+		/// Deprecated. Use SuggestValue(...) then Resolve(). If you must
+		/// use this, be sure to not use it if you
+		/// remove an edit variable (or edit constraints) from the middle
+		/// of a list of edits, and then try to resolve with this function
+		/// (you'll get the wrong answer, because the indices will be wrong
+		/// in the ClEditInfo objects).
+		/// </remarks>
+		public void Resolve(ArrayList newEditConstants)
+			/* throws ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("Resolve " + newEditConstants);
+			
+			foreach (ClVariable v in _editVarMap.Keys)
+			{
+				ClEditInfo cei = (ClEditInfo) _editVarMap[v];
+				int i = cei.Index;
+				try
+				{
+					if (i < newEditConstants.Count)
+					{
+						SuggestValue(v, ((ClDouble) newEditConstants[i]).Value);
+					}
+				} catch (ExClError e)
+				{
+					throw new ExClInternalError("Error during resolve");
+				}
+			}
+			Resolve();
+		}
+
+		/// <summary>
+		/// Convenience function for resolve-s of two variables.
+		/// </summary>
+		public void Resolve(double x, double y)
+			/* throws ExClInternalError */
+		{
+			((ClDouble) _resolve_pair[0]).Value = x;
+			((ClDouble) _resolve_pair[1]).Value = y;
+
+			Resolve(_resolve_pair);
+		}
+
+		/// <summary>
+		/// Re-solve the current collection of constraints, given the new
+		/// values for the edit variables that have already been
+		/// suggested (see <see cref="SuggestValue"/> method).
+		/// </summary>
+		public void Resolve()
+			/* throws ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("Resolve()");
+
+			DualOptimize();
+			SetExternalVariables();
+			_infeasibleRows.Clear();
+			ResetStayConstants();
+		}
+
+		/// <summary>
+		/// Suggest a new value for an edit variable. 
+		/// </summary>
+		/// <remarks>
+		/// The variable needs to be added as an edit variable and 
+		/// BeginEdit() needs to be called before this is called.
+		/// The tableau will not be solved completely until after Resolve()
+		/// has been called.
+		/// </remarks>
+		public ClSimplexSolver SuggestValue(ClVariable v, double x)
+			/* throws ExClError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("SuggestValue(" + v + ", " + x + ")");
+
+			ClEditInfo cei = (ClEditInfo) _editVarMap[v];
+			if (cei == null)
+			{
+				Console.Error.WriteLine("SuggestValue for variable " + v + ", but var is not an edit variable\n");
+				throw new ExClError();
+			}
+			int i = cei.Index;
+			ClSlackVariable clvEditPlus = cei.ClvEditPlus;
+			ClSlackVariable clvEditMinus = cei.ClvEditMinus;
+			double delta = x - cei.PrevEditConstant;
+			cei.PrevEditConstant = x;
+			DeltaEditConstant(delta, clvEditPlus, clvEditMinus);
+			
+			return this;
+		}
+
+		/// <summary>
+		/// Controls wether optimization and setting of external variables is done
+		/// automatically or not.
+		/// </summary>
+		/// <remarks>
+		/// By default it is done automatically and <see cref="Solve"/> never needs
+		/// to be explicitly called by client code. If <see cref="AutoSolve"/> is
+		/// put to false, then <see cref="Solve"/> needs to be invoked explicitly
+		/// before using variables' values. 
+		/// (Turning off <see cref="AutoSolve"/> while addings lots and lots
+		/// of constraints [ala the AddDel test in ClTests] saved about 20 % in
+		/// runtime, from 60sec to 54sec for 900 constraints, with 126 failed adds).
+		/// </remarks>
+		public bool AutoSolve
+		{
+			get { return _cOptimizeAutomatically; }
+			set { _cOptimizeAutomatically = value; }
+		}
+
+		public ClSimplexSolver Solve()
+			/* throws ExClInternalError */
+		{
+			if (_cNeedsSolving)
+			{
+				Optimize(_objective);
+				SetExternalVariables();
+			}
+			
+			return this;
+		}
 		
 		//// BEGIN PRIVATE INSTANCE FIELDS ////
 		
@@ -570,6 +712,7 @@ namespace Cassowary
 		/// values).
 		/// </summary>
 		private ArrayList _stayMinusErrorVars;
+
 		/// <summary>
 		/// The array of positive error vars for the stay constraints
 		/// (need both positive and negative since they have only non-negative
