@@ -1009,6 +1009,36 @@ namespace Cassowary
 			return subject;
 		}
 
+		protected ClLinearExpression NewExpression(ClConstraint cn,
+																							 ArrayList eplus_eminus,
+																							 ClDouble prevEConstant)
+		{
+			if (cTraceOn)
+			{
+				FnEnterPrint("NewExpression: " + cn);
+				TracePrint("cn.IsInequality == " + cn.IsInequality);
+				TracePrint("cn.IsRequired == " + cn.IsRequired);
+			}
+
+			ClLinearExpression cnExpr = cn.Expression;
+			
+			// TODO
+			
+			return cnExpr;
+		}
+		
+		/// <summary>
+		/// Minimize the value of the objective.
+		/// </summary>
+		/// <remarks>
+		/// The tableau should already be feasible.
+		/// </remarks>
+		protected void Optimize(ClObjectiveVariable zVar)
+			/* throws ExClInternalError */
+		{
+			// TODO
+		}
+
 		/// <summary>
 		/// Fix the constants in the equations representing the edit constraints.
 		/// </summary>
