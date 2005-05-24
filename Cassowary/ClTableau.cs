@@ -48,10 +48,16 @@ namespace Cassowary
 			}
 		}
 		  
+		/// <summary>
+		/// Returns information about the tableau's internals.
+		/// </summary>
 		/// <remarks>
 		/// Originally from Michael Noth <noth@cs.washington.edu>
 		/// </remarks>
-		public string GetInternalInfo() {
+		/// <returns>
+		/// String containing the information.
+		/// </returns>
+		public virtual string GetInternalInfo() {
 			string s = "Tableau Information:\n";
 			s += string.Format("Rows: {0} (= {1} constraints)", _rows.Count, _rows.Count - 1);
 			s += string.Format("\nColumns: {0}", _columns.Count);

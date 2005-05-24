@@ -703,6 +703,429 @@ namespace Cassowary
 			
 			return this;
 		}
+
+		public ClSimplexSolver SetEditedValue(ClVariable v, double n)
+			/* throws ExClInternalError */
+		{
+			if (!ContainsVariable(v))
+			{
+				v.ChangeValue(n);
+				return this;
+			}
+
+			if (!Cl.Approx(n, v.Value))
+			{
+				AddEditVar(v);
+				BeginEdit();
+				try
+				{
+					SuggestValue(v, n);
+				}
+				catch(ExClError e)
+				{
+					// just added it above, so we shouldn't get an error
+					throw new ExClInternalError("Error in SetEditedValue");
+				}
+				EndEdit();
+			}
+			
+			return this;
+		}
+
+		public bool ContainsVariable(ClVariable v)
+			/* throws ExClInternalError */
+		{
+			return ColumnsHasKey(v) || (RowExpression(v) != null);
+		}
+
+		public ClSimplexSolver AddVar(ClVariable v)
+			/* throws ExClInternalError */
+		{
+			if (!ContainsVariable(v))
+			{
+				try 
+				{
+					AddStay(v);
+				}
+				catch(ExClRequiredFailure rf)
+				{
+					// cannot have a required failure, since we add w/ weak
+					throw new ExClInternalError("Error in AddVar -- required failure is impossible");
+				}
+				
+				if (cTraceOn)
+					TracePrint("added initial stay on " + v);
+			}
+
+			return this;
+		}
+
+		/// <summary>
+		/// Returns information about the solver's internals.
+		/// </summary>
+		/// <remarks>
+		/// Originally from Michael Noth <noth@cs.washington.edu>
+		/// </remarks>
+		/// <returns>
+		/// String containing the information.
+		/// </returns>
+		public override string GetInternalInfo()
+		{
+			string result = base.GetInternalInfo();
+
+			result += "\nSolver info:\n";
+			result += "Stay Error Variables: ";
+			result += _stayPlusErrorVars.Count + _stayMinusErrorVars.Count;
+			result += " (" +_stayPlusErrorVars.Count + " +, ";
+			result += _stayMinusErrorVars.Count + " -)\n";
+			result += "Edit Variables: " + _editVarMap.Count;
+			result += "\n";
+			
+			return result;
+		}
+
+		public string GetDebugInfo()
+		{
+			string result = ToString();
+			result += GetInternalInfo();
+			result += "\n";
+
+			return result;
+		}
+
+		public override string ToString()
+		{
+			string result = base.ToString();
+
+			result += "\n_stayPlusErrorVars: ";
+			result += _stayPlusErrorVars;
+			result += "\n_stayMinusErrorVars: ";
+			result += _stayMinusErrorVars;
+			result += "\n";
+
+			return result;
+		}
+
+		public Hashtable ConstraintMap
+		{
+			get { return _markerVars; }
+		}
+
+		//// END PUBLIC INTERFACE ////
+		
+		/// <summary>
+		/// Add the constraint expr=0 to the inequality tableau using an
+		/// artificial variable.
+		/// </summary>
+		/// <remarks>
+		/// To do this, create an artificial variable av and add av=expr
+		/// to the inequality tableau, then make av be 0 (raise an exception
+		/// if we can't attain av=0).
+		/// </remarks>
+		protected void AddWithArtificialVariable(ClLinearExpression expr)
+			/* throws ExClRequiredFailure, ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("AddWithArtificialVariable: " + expr);
+
+			ClSlackVariable av = new ClSlackVariable(++_artificialCounter, "a");
+			ClObjectiveVariable az = new ClObjectiveVariable("az");
+			ClLinearExpression azRow = (ClLinearExpression) expr.Clone();
+			
+			if (cTraceOn)
+				TracePrint("before AddRows:\n" + this);
+
+			AddRow(az, azRow);
+			AddRow(av, expr);
+
+			if (cTraceOn)
+				TracePrint("after AddRows:\n" + this);
+			
+			Optimize(az);
+
+			ClLinearExpression azTableauRow = RowExpression(az);
+
+			if (cTraceOn)
+				TracePrint("azTableauRow.Constant == " + azTableauRow.Constant);
+
+			if (!Cl.Approx(azTableauRow.Constant, 0.0))
+			{
+				RemoveRow(az);
+				RemoveColumn(av);
+				throw new ExClRequiredFailure();
+			}
+
+			// see if av is a basic variable
+			ClLinearExpression e = RowExpression(av);
+
+			if (e != null)
+			{
+				// find another variable in this row and pivot,
+				// so that av becomes parametric
+				if (e.IsConstant)
+				{
+					// if there isn't another variable in the row
+					// then the tableau contains the equation av=0 --
+					// just delete av's row
+					RemoveRow(av);
+					RemoveRow(az);
+					return;
+				}
+				ClAbstractVariable entryVar = e.AnyPivotableVariable();
+				Pivot(entryVar, av);
+			}
+			Assert(RowExpression(av) == null, "RowExpression(av) == null)");
+			RemoveColumn(av);
+			RemoveRow(az);
+		}
+
+		/// <summary>
+		/// Try to add expr directly to the tableau without creating an
+		/// artificial variable.
+		/// </summary>
+		/// <remarks>
+		/// We are trying to add the constraint expr=0 to the appropriate
+		/// tableau.
+		/// </remarks>
+		/// <returns>
+		/// True if successful and false if not.
+		/// </returns>
+		protected bool TryAddingDirectly(ClLinearExpression expr)
+			/* throws ExClRequiredFailure */
+		{
+			if (cTraceOn)
+				FnEnterPrint("TryAddingDirectly: " + expr);
+
+			ClAbstractVariable subject = ChooseSubject(expr);
+			if (subject == null)
+			{
+				if (cTraceOn)
+					FnExitPrint("returning false");
+				return false;
+			}
+			expr.NewSubject(subject);
+			if (ColumnsHasKey(subject))
+			{
+				SubstituteOut(subject, expr);
+			}
+			AddRow(subject, expr);
+			if (cTraceOn)
+				FnExitPrint("returning true");
+			return true; // succesfully added directly
+		}
+
+		/// <summary>
+		///	Try to choose a subject (a variable to become basic) from
+		///	among the current variables in expr.
+		/// </summary>
+		/// <remarks>
+		/// We are trying to add the constraint expr=0 to the tableaux.
+		/// If expr constains any unrestricted variables, then we must choose
+		/// an unrestricted variable as the subject. Also if the subject is
+		/// new to the solver, we won't have to do any substitutions, so we
+		/// prefer new variables to ones that are currently noted as parametric.
+		/// If expr contains only restricted variables, if there is a restricted
+		/// variable with a negative coefficient that is new to the solver we can
+		/// make that the subject. Otherwise we can't find a subject, so return nil.
+		/// (In this last case we have to add an artificial variable and use that
+		/// variable as the subject -- this is done outside this method though.)
+		/// </remarks>
+		protected ClAbstractVariable ChooseSubject(ClLinearExpression expr)
+			/* ExClRequiredFailure */
+		{
+			if (cTraceOn)
+				FnEnterPrint("ChooseSubject: " + expr);
+
+			ClAbstractVariable subject = null; // the current best subject, if any
+
+			bool foundUnrestricted = false;
+			bool foundNewRestricted = false;
+
+			Hashtable terms = expr.Terms;
+
+			foreach (ClAbstractVariable v in terms.Keys)
+			{
+				double c = ((ClDouble) terms[v]).Value;
+
+				if (foundUnrestricted)
+				{
+					if (!v.IsRestricted)
+					{
+						if (!ColumnsHasKey(v))
+							return v;
+					}
+				}
+				else
+				{
+					// we haven't found an restricted variable yet
+					if (v.IsRestricted)
+					{
+						if (!foundNewRestricted && !v.IsDummy && c < 0.0)
+						{
+							Set col = (Set) _columns[v];
+							if ( col == null ||
+									 (col.Count == 1 && ColumnsHasKey(_objective)) ) 
+							{
+								subject = v;
+								foundNewRestricted = true;
+							}
+						}
+					}
+					else
+					{
+						subject = v;
+						foundUnrestricted = true;
+					}
+				}
+			}
+
+			if (subject != null)
+				return subject;
+
+			double coeff = 0.0;
+
+			foreach (ClAbstractVariable v in terms.Keys)
+			{
+				double c = ((ClDouble) terms[v]).Value;
+				
+				if (!v.IsDummy)
+					return null; // nope, no luck
+				if (!ColumnsHasKey(v))
+				{
+					subject = v;
+					coeff = c;
+				}
+			}
+
+			if (!Cl.Approx(expr.Constant, 0.0))
+			{
+				throw new ExClRequiredFailure();
+			}
+			if (coeff > 0.0)
+			{
+				expr.MultiplyMe(-1);
+			}
+			
+			return subject;
+		}
+
+		/// <summary>
+		/// Do a pivot. Move entryVar into the basis and move exitVar 
+		/// out of the basis.
+		/// </summary>
+		/// <remarks>
+		/// We could for example make entryVar a basic variable and
+		/// make exitVar a parametric variable.
+		/// </remarks>
+		protected void Pivot(ClAbstractVariable entryVar,
+												 ClAbstractVariable exitVar)
+			/* throws ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("Pivot: " + entryVar + ", " + exitVar);
+
+			// the entryVar might be non-pivotable if we're doing a 
+			// RemoveConstraint -- otherwise it should be a pivotable
+			// variable -- enforced at call sites, hopefully
+
+			ClLinearExpression pexpr = RemoveRow(exitVar);
+
+			pexpr.ChangeSubject(exitVar, entryVar);
+			SubstituteOut(entryVar, pexpr);
+			AddRow(entryVar, pexpr);
+		}
+		
+		/// <summary>
+		/// Fix the constants in the equations representing the stays.
+		/// </summary>
+		/// <remarks>
+		/// Each of the non-required stays will be represented by an equation
+		/// of the form
+		/// 	v = c + eplus - eminus
+		/// where v is the variable with the stay, c is the previous value
+		/// of v, and eplus and eminus are slack variables that hold the error
+		/// in satisfying the stay constraint. We are about to change something,
+		/// and we want to fix the constants in the equations representing the
+		/// stays. If both eplus and eminus are nonbasic they have value 0
+		/// in the current solution, meaning the previous stay was exactly
+		/// satisfied. In this case nothing needs to be changed. Otherwise one
+		/// of them is basic, and the other must occur only in the expression
+		/// for that basic error variable. Reset the constant of this
+		/// expression to 0.
+		/// </remarks>
+		protected void ResetStayConstants()
+		{
+			if (cTraceOn)
+				FnEnterPrint("ResetStayConstants");
+
+			for (int i = 0; i < _stayPlusErrorVars.Count; i++)
+			{
+				ClLinearExpression expr = 
+					RowExpression((ClAbstractVariable) _stayPlusErrorVars[i]);
+				if (expr == null)
+					expr = RowExpression((ClAbstractVariable) _stayMinusErrorVars[i]);
+				if (expr != null)
+					expr.Constant = 0.0;
+			}
+		}
+		
+		/// <summary>
+		/// Set the external variables known to this solver to their appropriate values.
+		/// </summary>
+		/// <remarks>
+		/// Set each external basic variable to its value, and set each external parametric
+		/// variable to 0. (It isn't clear that we will ever have external parametric
+		/// variables -- every external variable should either have a stay on it, or have an
+		/// equation that defines it in terms of other external variables that do have stays.
+		/// For the moment I'll put this in though.) Variables that are internal to the solver
+		/// don't actually store values -- their values are just implicit in the tableau -- so
+		/// we don't need to set them.
+		/// </remarks>
+		protected void SetExternalVariables()
+		{
+			if (cTraceOn)
+				FnEnterPrint("SetExternalVariables:");
+			if (cTraceOn)
+				TracePrint(this.ToString());
+
+			foreach (ClVariable v in _externalParametricVars)
+			{
+				if (RowExpression(v) != null)
+				{
+					Console.Error.WriteLine("Error: variable " + v +
+																	"in _externalParametricVars is basic");
+					continue;
+				}
+				v.ChangeValue(0.0);
+			}
+
+			foreach (ClVariable v in _externalRows)
+			{
+				ClLinearExpression expr = RowExpression(v);
+				if (cTraceOn)
+					DebugPrint("v == " + v);
+				if (cTraceOn)
+					DebugPrint("expr == " + expr);
+				v.ChangeValue(expr.Constant);
+			}
+
+			_cNeedsSolving = false;
+		}
+		
+		/// <summary>
+		/// Protected convenience function to insert an error variable
+		/// into the _errorVars set, creating the mapping with Add as necessary.
+		/// </summary>
+		protected void InsertErrorVar(ClConstraint cn, ClAbstractVariable var)
+		{
+			if (cTraceOn)
+				FnEnterPrint("InsertErrorVar: " + cn + ", " + var);
+
+			Set cnset = (Set) _errorVars[var];
+			if (cnset == null)
+				_errorVars.Add(cn, cnset = new Set());
+			cnset.Add(var);
+		}
 		
 		//// BEGIN PRIVATE INSTANCE FIELDS ////
 		
@@ -746,7 +1169,7 @@ namespace Cassowary
 		/// <remarks>
 		/// ClEditInfo instances contain all the information for an
 		/// edit constraints (the edit plus/minus vars, the index [for old-style
-		/// resolve(Vector...)] interface), and the previous value.
+		/// resolve(ArrayList...)] interface), and the previous value.
 		/// (ClEditInfo replaces the parallel vectors from the Smalltalk impl.)
 		/// </remarks>
 		private Hashtable _editVarMap;
