@@ -3,13 +3,14 @@
 # Author: Jo Vermeulen <jo@lumumba.uhasselt.be>
 
 SRC_DIR = Cassowary
+WARN_LEVEL = 1
 
 all: lib test
 
 lib:
-	mcs -warn:4 -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
+	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 test:
-	mcs -warn:4 -target:exe -main:ClTests -out:ClTests.exe ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs ${SRC_DIR}/Tests/*.cs
+	mcs -warn:${WARN_LEVEL} -target:exe -main:ClTests -out:ClTests.exe ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs ${SRC_DIR}/Tests/*.cs
 
 clean:
 	rm *.exe 

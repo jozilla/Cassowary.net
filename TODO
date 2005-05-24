@@ -1,23 +1,18 @@
 Classes:
-	- ClSimplexSolver
-		// public interface //
-		* SetEditedValue
-		* ContainsVariable
-		* AddVar
-		* GetInternalInfo
-		* GetDebugInfo
-		* ToString
-		* ConstraintMap property
+	* ClSimplexSolver
 		// encapsulated interface //
-		* AddWithArtificialVariable
-		* TryAddingDirectly
-		* ChooseSubject
-		* DeleteEditConstraint
-		* DualOptimize
-		* NewExpression
-		* Optimize
-		* Pivot
-		* ResetStayConstants
-		* SetExternalVariables
-		* InsertErrorVar
+		- DeltaEditConstraint
+		- DualOptimize
+		- NewExpression
+		- Optimize
 
+Improvements:
+	* make better use of C#/.NET's features, e.g.
+		- use #ifdef for trace and debug modes instead of bool constants
+		- provide operator overloads for operations on expressions, variables,
+		  constraints, symbolic weights, etc.
+		- use .NET's built-in assert function instead of Cl.Assert
+	* documentation
+		- check for formatting errors
+		- complete the documentation
+	* unit tests
