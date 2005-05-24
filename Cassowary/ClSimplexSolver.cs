@@ -1010,6 +1010,126 @@ namespace Cassowary
 		}
 
 		/// <summary>
+		/// Fix the constants in the equations representing the edit constraints.
+		/// </summary>
+		/// <remarks>
+		/// Each of the non-required edits will be represented by an equation
+		/// of the form:
+		/// 	v = c + eplus - eminus
+		/// where v is the variable with the edit, c is the previous edit value,
+		/// and eplus and eminus are slack variables that hold the error in 
+		/// satisfying the edit constraint. We are about to change something,
+		/// and we want to fix the constants in the equations representing
+		/// the edit constraints. If one of eplus and eminus is basic, the other
+		/// must occur only in the expression for that basic error variable. 
+		/// (They can't both be basic.) Fix the constant in this expression.
+		/// Otherwise they are both non-basic. Find all of the expressions
+		/// in which they occur, and fix the constants in those. See the
+		/// UIST paper for details.
+		/// (This comment was for ResetEditConstants(), but that is now
+		/// gone since it was part of the screwey vector-based interface
+		/// to resolveing. --02/16/99 gjb)
+		/// </remarks>
+		protected void DeltaEditConstant(double delta,
+																		 ClAbstractVariable plusErrorVar,
+																		 ClAbstractVariable minusErrorVar)
+		{
+			if (cTraceOn)
+				FnEnterPrint("DeltaEditConstant :" + delta + ", " 
+						+ plusErrorVar + ", " + minusErrorVar);
+
+			ClLinearExpression exprPlus = RowExpression(plusErrorVar);
+			if (exprPlus != null)
+			{
+				exprPlus.IncrementConstant(delta);
+
+				if (exprPlus.Constant < 0.0)
+				{
+					_infeasibleRows.Add(plusErrorVar);
+				}
+				return;
+			}
+
+			ClLinearExpression exprMinus = RowExpression(minusErrorVar);
+			if (exprMinus != null)
+			{
+				exprMinus.IncrementConstant(-delta);
+				if (exprMinus.Constant < 0.0)
+				{
+					_infeasibleRows.Add(minusErrorVar);
+				}
+				return;
+			}
+
+			Set columnVars = (Set) _columns[minusErrorVar];
+
+			foreach (ClAbstractVariable basicVar in columnVars)
+			{
+				ClLinearExpression expr = RowExpression(basicVar);
+				//Assert(expr != null, "expr != null");
+				double c = expr.CoefficientFor(minusErrorVar);
+				expr.IncrementConstant(c * delta);
+				if (basicVar.IsRestricted && expr.Constant < 0.0)
+				{
+					_infeasibleRows.Add(basicVar);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Re-optimize using the dual simplex algorithm.
+		/// </summary>
+		/// <remarks>
+		/// We have set new values for the constants in the edit constraints.
+		/// </remarks>
+		protected void DualOptimize()
+			/* throws ExClInternalError */
+		{
+			if (cTraceOn)
+				FnEnterPrint("DualOptimize: ");
+
+			ClLinearExpression zRow = RowExpression(_objective);
+			while (!_infeasibleRows.Empty)
+			{
+				IEnumerator enumIfRows = _infeasibleRows.GetEnumerator();
+				enumIfRows.MoveNext();
+				ClAbstractVariable exitVar = (ClAbstractVariable) enumIfRows.Current;
+
+				_infeasibleRows.Remove(exitVar);
+				ClAbstractVariable entryVar = null;
+				ClLinearExpression expr = RowExpression(exitVar);
+				if (expr != null)
+				{
+					if (expr.Constant < 0.0)
+					{
+						double ratio = Double.MaxValue;
+						double r;
+						Hashtable terms = expr.Terms;
+						foreach (ClAbstractVariable v in terms.Keys)
+						{
+							double c = ((ClDouble) terms[v]).Value;
+							if (c > 0.0 && v.IsPivotable)
+							{
+								double zc = zRow.CoefficientFor(v);
+								r = zc / c; // FIXME: zc / c or zero, as ClSymbolicWeigth-s
+								if (r < ratio)
+								{
+									entryVar = v;
+									ratio = r;
+								}
+							}
+						}
+						if (ratio == Double.MaxValue)
+						{
+							throw new ExClInternalError("ratio == nil (Double.MaxValue) in DualOptimize");
+						}
+						Pivot(entryVar, exitVar);
+					}
+				}
+			}
+		}
+		
+		/// <summary>
 		/// Do a pivot. Move entryVar into the basis and move exitVar 
 		/// out of the basis.
 		/// </summary>
