@@ -48,7 +48,7 @@ namespace Cassowary.Tests
 			ClVariable x = new ClVariable("x");
 			ClSimplexSolver solver = new ClSimplexSolver();
 				
-			solver.addConstraint( new ClLinearEquation(x, 100, ClStrength.Weak ) );
+			solver.AddConstraint( new ClLinearEquation(x, 100, ClStrength.Weak ) );
 				
 			ClLinearInequality c10 = new ClLinearInequality(x, Cl.LEQ, 10.0);
 			ClLinearInequality c20 = new ClLinearInequality(x, Cl.LEQ, 20.0);
@@ -60,15 +60,15 @@ namespace Cassowary.Tests
 			okResult = okResult && Cl.Approx(x, 10.0);
 			Console.WriteLine("x == " + x.Value);
 				
-			solver.removeConstraint(c10);
+			solver.RemoveConstraint(c10);
 			okResult = okResult && Cl.Approx(x, 20.0);
 			Console.WriteLine("x == " + x.Value);
 
-			solver.removeConstraint(c20);
+			solver.RemoveConstraint(c20);
 			okResult = okResult && Cl.Approx(x, 100.0);
 			Console.WriteLine("x == " + x.Value);
 
-			ClLinearInequality c10again = new ClLinearInequality(x, CL.LEQ, 10.0);
+			ClLinearInequality c10again = new ClLinearInequality(x, Cl.LEQ, 10.0);
 
 			solver
 				.AddConstraint(c10)

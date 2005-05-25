@@ -1,5 +1,6 @@
-Bug fixing:
+Bug squashing:
 	* get LayoutTest.exe working
+	* get ClTests.exe working
 
 Improvements:
 	* make better use of C#/.NET's features, e.g.
