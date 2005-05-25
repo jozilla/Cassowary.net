@@ -13,8 +13,8 @@ namespace Cassowary
 		{
 			_values = new double[3];
 			_values[0] = w1;
-			_values[2] = w2;
-			_values[3] = w3;
+			_values[1] = w2;
+			_values[2] = w3;
 		}
 
 		public ClSymbolicWeight(double[] weights)
