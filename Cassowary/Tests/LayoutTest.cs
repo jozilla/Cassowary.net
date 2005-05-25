@@ -362,7 +362,7 @@ namespace Cassowary.Tests
 			_solver.AddConstraint(new ClLinearInequality(newpost_right, Cl.LEQ, quit_left, ClStrength.Strong));
 			//_solver.AddConstraint(new ClLinearEquation(bottomRight_width, new ClLinearExpression(topRight_width), ClStrength.Strong));
 			//_solver.AddConstraint(new ClLinearEquation(right_width, new ClLinearExpression(topRight_width), ClStrength.Strong));
-			_solver.AddConstraint(new ClLinearEquation(bottomRight_bottom, new ClLinearExpression(right_bottom), ClStrength.Strong));
+			_solver.AddConstraint(new ClLinearEquation(bottomRight_bottom, new ClLinearExpression(right_bottom), ClStrength.Strong)); // BUG: gives an error!
 			_solver.AddConstraint(new ClLinearEquation(newpost_height, new ClLinearExpression(update_height), ClStrength.Strong));
 			_solver.AddConstraint(new ClLinearEquation(newpost_width, new ClLinearExpression(update_width), ClStrength.Strong));
 			_solver.AddConstraint(new ClLinearEquation(update_height, new ClLinearExpression(quit_height), ClStrength.Strong));
