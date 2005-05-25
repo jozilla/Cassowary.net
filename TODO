@@ -1,8 +1,4 @@
-Classes:
-	* ClSimplexSolver
-		// encapsulated interface //
-		- NewExpression
-		- Optimize
+Testing!
 
 Improvements:
 	* make better use of C#/.NET's features, e.g.

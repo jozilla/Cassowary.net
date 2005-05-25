@@ -1021,10 +1021,100 @@ namespace Cassowary
 			}
 
 			ClLinearExpression cnExpr = cn.Expression;
-			
-			// TODO
-			
-			return cnExpr;
+			ClLinearExpression expr = new ClLinearExpression(cnExpr.Constant);
+			ClSlackVariable slackVar = new ClSlackVariable();
+			ClDummyVariable dummyVar = new ClDummyVariable();
+			ClSlackVariable eminus = new ClSlackVariable();
+			ClSlackVariable eplus = new ClSlackVariable();
+			Hashtable cnTerms = cnExpr.Terms;
+			foreach(ClAbstractVariable v in cnTerms.Keys)
+			{
+				double c = ((ClDouble) cnTerms[v]).Value;
+				ClLinearExpression e = RowExpression(v);
+				if (e == null)
+					expr.AddVariable(v, c);
+				else
+					expr.AddExpression(e, c);
+			}
+
+			if (cn.IsInequality)
+			{
+				++_slackCounter;
+				slackVar = new ClSlackVariable (_slackCounter, "s");
+				expr.SetVariable(slackVar, -1);
+				_markerVars.Add(cn, slackVar);
+				if (!cn.IsRequired)
+				{
+					++_slackCounter;
+					eminus = new ClSlackVariable(_slackCounter, "em");
+					expr.SetVariable(eminus, 1.0);
+					ClLinearExpression zRow = RowExpression(_objective);
+					ClSymbolicWeight sw = cn.Strength.SymbolicWeight.Times(cn.Weight);
+					zRow.SetVariable(eminus, sw.AsDouble());
+					InsertErrorVar(cn, eminus);
+					NoteAddedVariable(eminus, _objective);
+				}
+			}
+			else
+			{
+				// cn is an equality
+				if (cn.IsRequired)
+				{
+					++_dummyCounter;
+					dummyVar = new ClDummyVariable(_dummyCounter, "d");
+					expr.SetVariable(dummyVar, 1.0);
+					_markerVars.Add(cn, dummyVar);
+					if (cTraceOn)
+						TracePrint("Adding dummyVar == d" + _dummyCounter);
+				}
+				else
+				{
+					++_slackCounter;
+					eplus = new ClSlackVariable(_slackCounter, "ep");
+					eminus = new ClSlackVariable(_slackCounter, "em");
+
+					expr.SetVariable(eplus, -1.0);
+					expr.SetVariable(eminus, 1.0);
+					_markerVars.Add(cn, eplus);
+					ClLinearExpression zRow = RowExpression(_objective);
+					ClSymbolicWeight sw = cn.Strength.SymbolicWeight.Times(cn.Weight);
+					double swCoeff = sw.AsDouble();
+					if (swCoeff == 0)
+					{
+						if (cTraceOn)
+						{
+							TracePrint("sw == " + sw);
+							TracePrint("cn == " + cn);
+							TracePrint("adding " + eplus + " and " + eminus + " with swCoeff == " + swCoeff);
+						}
+					}
+					zRow.SetVariable(eplus, swCoeff);
+					NoteAddedVariable(eplus, _objective);
+					zRow.SetVariable(eminus, swCoeff);
+					NoteAddedVariable(eminus, _objective);
+					InsertErrorVar(cn, eminus);
+					InsertErrorVar(cn, eplus);
+					if (cn.IsStayConstraint)
+					{
+						_stayPlusErrorVars.Add(eplus);
+						_stayMinusErrorVars.Add(eminus);
+					}
+					else if (cn.IsEditConstraint)
+					{
+						eplus_eminus.Add(eplus);
+						eplus_eminus.Add(eminus);
+						prevEConstant.Value = cnExpr.Constant;
+					}
+				}
+			}
+
+			if (expr.Constant < 0)
+				expr.MultiplyMe(-1);
+
+			if (cTraceOn)
+				FnExitPrint("returning " + expr);
+
+			return expr;
 		}
 		
 		/// <summary>
@@ -1036,7 +1126,68 @@ namespace Cassowary
 		protected void Optimize(ClObjectiveVariable zVar)
 			/* throws ExClInternalError */
 		{
-			// TODO
+			if (cTraceOn) 
+			{
+				FnEnterPrint("Optimize: " + zVar);
+				TracePrint(this.ToString());
+			}
+
+			ClLinearExpression zRow = RowExpression(zVar);
+			Assert(zRow != null, "zRow != null");
+			ClAbstractVariable entryVar = null;
+			ClAbstractVariable exitVar = null;
+			while (true)
+			{
+				double objectiveCoeff = 0;
+				Hashtable terms = zRow.Terms;
+				foreach (ClAbstractVariable v in terms.Keys)
+				{
+					double c = ((ClDouble) terms[v]).Value;
+					if (v.IsPivotable && c < objectiveCoeff)
+					{
+						objectiveCoeff = c;
+						entryVar = v;
+					}
+				}
+				if (objectiveCoeff >= -_epsilon || entryVar == null)
+					return;
+				if (cTraceOn)
+					TracePrint("entryVar == " + entryVar + ", objectiveCoeff == " + objectiveCoeff);
+
+				double minRatio = Double.MaxValue;
+				Set columnVars = (Set) _columns[entryVar];
+				double r = 0.0;
+				foreach (ClAbstractVariable v in columnVars)
+				{
+					if (cTraceOn)
+						TracePrint("Checking " + v);
+					if (v.IsPivotable)
+					{
+						ClLinearExpression expr = RowExpression(v);
+						double coeff = expr.CoefficientFor(entryVar);
+						if (cTraceOn)
+							TracePrint("pivotable, coeff == " + coeff);
+						if (coeff < 0.0)
+						{
+							r = - expr.Constant / coeff;
+							if (r < minRatio)
+							{
+								if (cTraceOn)
+									TracePrint("New minRatio == " + r);
+								minRatio = r;
+								exitVar = v;
+							}
+						}
+					}
+				}
+				if (minRatio == Double.MaxValue)
+				{
+					throw new ExClInternalError("Objective function is unbounded in Optimize");
+				}
+				Pivot(entryVar, exitVar);
+				if (cTraceOn)
+					TracePrint(this.ToString());
+			}
 		}
 
 		/// <summary>
