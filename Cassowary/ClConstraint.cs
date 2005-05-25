@@ -67,7 +67,11 @@ namespace Cassowary
 		
 		public override string ToString()
 		{
-			return string.Format("{0} {{1}} {{2}}", Strength, Weight, Expression);
+			// two curly brackets escape the format, so use three to surround
+			// a format expression in brackets!
+			//
+			// example output: weak:[0,0,1] {1} {23 + -1*[update.height:23]}
+			return string.Format("{0} {{{1}}} {{{2}}}", Strength, Weight, Expression);
 		}
 
 		private ClStrength _strength;
