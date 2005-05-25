@@ -17,4 +17,4 @@ layout_test: lib
 	mcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.LayoutTest -out:LayoutTest.exe -r:Cassowary.dll ${SRC_DIR}/Tests/LayoutTest.cs
 
 clean:
-	rm *.exe 
+	rm *.dll *.exe 
