@@ -5,10 +5,12 @@
 SRC_DIR = Cassowary
 WARN_LEVEL = 1
 
-all: lib cltests layout_test
+all: lib tests 
 
 lib:
 	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
+
+tests: cltests layout_test
 
 cltests: lib
 	mcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.ClTests -out:ClTests.exe -r:Cassowary.dll ${SRC_DIR}/Tests/ClTests.cs
