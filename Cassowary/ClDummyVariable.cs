@@ -1,6 +1,6 @@
 using System;
 
-namespace Cassowary.net
+namespace Cassowary
 {
 	class ClDummyVariable : ClAbstractVariable
 	{
