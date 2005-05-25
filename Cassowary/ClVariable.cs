@@ -11,6 +11,15 @@ namespace Cassowary
 				_ourVarMap.Add(name, this);
 			}
 		}
+
+		public ClVariable(string name) : base(name)
+		{
+			_value = 0.0;
+			if (_ourVarMap != null)
+			{
+				_ourVarMap.Add(name, this);
+			}
+		}
 	
 		public ClVariable(double value)
 		{
