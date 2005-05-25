@@ -1,4 +1,5 @@
-Testing!
+Bug fixing:
+	* get LayoutTest.exe working
 
 Improvements:
 	* make better use of C#/.NET's features, e.g.
