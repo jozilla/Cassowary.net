@@ -1422,9 +1422,12 @@ namespace Cassowary
 			if (cTraceOn)
 				FnEnterPrint("InsertErrorVar: " + cn + ", " + var);
 
+			// BUG: why retrieve with var as key?
 			Set cnset = (Set) _errorVars[var];
 			if (cnset == null)
-				_errorVars.Add(cn, cnset = new Set());
+				// BUG: overwrite?
+				//_errorVars.Add(cn, cnset = new Set());
+				_errorVars[cn] = cnset = new Set();
 			cnset.Add(var);
 		}
 		
