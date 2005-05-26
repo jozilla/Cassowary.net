@@ -127,7 +127,30 @@ namespace Cassowary.Tests
 				
 			return okResult;
 		}
+	
+		public static bool Casso1()
+  	{
+			bool okResult = true; 
+			ClVariable x = new ClVariable("x");
+			ClVariable y = new ClVariable("y");
+			ClSimplexSolver solver = new ClSimplexSolver();
 
+			solver
+				.AddConstraint( new ClLinearInequality(x, Cl.LEQ, y) )
+				.AddConstraint( new ClLinearEquation(y, Cl.Plus(x, 3.0)) )
+				.AddConstraint( new ClLinearEquation(x, 10.0, ClStrength.Weak) )
+				.AddConstraint( new ClLinearEquation(y, 10.0, ClStrength.Weak) )
+				;
+		 
+			okResult = okResult && 
+				( Cl.Approx(x,10.0) && Cl.Approx(y,13.0) ||
+					Cl.Approx(x,7.0) && Cl.Approx(y,10.0) );
+				
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+			
+			return okResult;
+  	} 
+  
 		public static bool Inconsistent1()
 		{
 			try 
@@ -149,7 +172,103 @@ namespace Cassowary.Tests
 				return true;
 			}
 		}
-						
+		
+		public static bool Inconsistent2()
+		{
+			try 
+			{
+				ClVariable x = new ClVariable("x");
+				ClSimplexSolver solver = new ClSimplexSolver();
+				
+				solver
+					.AddConstraint( new ClLinearInequality(x, Cl.GEQ, 10.0) )
+					.AddConstraint( new ClLinearInequality(x, Cl.LEQ, 5.0) );
+
+				// no exception, we failed!
+				return false;
+			} 
+			catch (ExClRequiredFailure err)
+			{
+				// we want this exception to get thrown
+				Console.WriteLine("-- got the exception");
+				return true;
+			}
+		}
+
+		public static bool Multiedit()
+		{
+			try 
+			{
+				bool okResult = true;
+
+				ClVariable x = new ClVariable("x");
+				ClVariable y = new ClVariable("y");
+				ClVariable w = new ClVariable("w");
+				ClVariable h = new ClVariable("h");
+				ClSimplexSolver solver = new ClSimplexSolver();
+				
+				solver
+					.AddStay(x)
+					.AddStay(y)
+					.AddStay(w)
+					.AddStay(h);
+
+				solver
+					.AddEditVar(x)
+					.AddEditVar(y)
+					.BeginEdit();
+
+				solver
+					.SuggestValue(x, 10)
+					.SuggestValue(y, 20)
+					.Resolve();
+
+				Console.WriteLine("x = " + x.Value + "; y = " + y.Value);
+				Console.WriteLine("w = " + w.Value + "; h = " + h.Value);
+
+				okResult = okResult &&
+					Cl.Approx(x, 10) && Cl.Approx(y, 20) &&
+					Cl.Approx(w, 0) && Cl.Approx(h, 0);
+
+				solver
+					.AddEditVar(w)
+					.AddEditVar(h)
+					.BeginEdit();
+
+				solver
+					.SuggestValue(w, 30)
+					.SuggestValue(h, 40)
+					.EndEdit();
+
+				Console.WriteLine("x = " + x.Value + "; y = " + y.Value);
+				Console.WriteLine("w = " + w.Value + "; h = " + h.Value);
+
+				okResult = okResult &&
+					Cl.Approx(x, 10) && Cl.Approx(y, 20) && 
+					Cl.Approx(w, 30) && Cl.Approx(h, 40);
+
+				solver
+					.SuggestValue(x, 50)
+					.SuggestValue(y, 60)
+					.EndEdit();
+
+				Console.WriteLine("x = " + x.Value + "; y = " + y.Value);
+				Console.WriteLine("w = " + w.Value + "; h = " + h.Value);
+
+				okResult = okResult &&
+					Cl.Approx(x, 50) && Cl.Approx(y, 60) &&
+					Cl.Approx(w, 30) && Cl.Approx(h, 40);
+
+				return okResult;
+			} 
+			catch (ExClRequiredFailure err)
+			{
+				// we want this exception to get thrown
+				Console.WriteLine("-- got the exception");
+				return true;
+			}
+  	}
+		
 		[STAThread]
 		static void Main(string[] args)
 		{
@@ -208,9 +327,45 @@ namespace Cassowary.Tests
 			if (Cl.cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
+			////////////////////////// Casso1 ////////////////////////// 
+			Console.WriteLine("\nCasso1:");
+      result = Casso1(); 
+			allOkResult &= result;
+			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (Cl.cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
 			////////////////////////// Inconsistent1 ////////////////////////// 
 			Console.WriteLine("\nInconsistent1:");
       result = Inconsistent1(); 
+			allOkResult &= result;
+			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (Cl.cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+			
+			////////////////////////// Inconsistent2 ////////////////////////// 
+			Console.WriteLine("\nInconsistent2:");
+      result = Inconsistent2(); 
+			allOkResult &= result;
+			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (Cl.cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+			
+			////////////////////////// Multiedit ////////////////////////// 
+			Console.WriteLine("\nMultiedit:");
+      result = Multiedit(); 
 			allOkResult &= result;
 			
 			if (!result) 
