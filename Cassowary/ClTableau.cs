@@ -147,8 +147,8 @@ namespace Cassowary
 				FnEnterPrint(string.Format("RemoveColumn: {0}", var));
 			// remove the rows with the variables in varset
 
+			Set rows = (Set) _columns[var];
 			_columns.Remove(var);
-			Set rows = (Set) _columns;
 
 			if (rows != null) {
 				foreach(ClAbstractVariable clv in rows)
