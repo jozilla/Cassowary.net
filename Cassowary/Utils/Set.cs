@@ -71,7 +71,7 @@ namespace Cassowary.Utils
 			
 			// add each element
 
-			foreach (object o in _hash)
+			foreach (object o in _hash.Keys)
 			{
 				result += o;
 				result += separator;
