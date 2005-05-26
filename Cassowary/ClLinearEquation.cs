@@ -85,7 +85,7 @@ namespace Cassowary
 
 		public override string ToString()
 		{
-			return base.ToString() + " = 0 )";
+			return base.ToString() + " = 0)";
 		}
 	}
 }

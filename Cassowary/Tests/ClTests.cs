@@ -21,7 +21,7 @@ namespace Cassowary.Tests
 			Console.WriteLine("x == " + x.Value);
 			Console.WriteLine("y == " + y.Value);
 	
-			return(okResult);
+			return okResult;
 		}
 		
 		public static bool JustStay1()
@@ -39,7 +39,7 @@ namespace Cassowary.Tests
 			Console.WriteLine("x == " + x.Value);
 	    Console.WriteLine("y == " + y.Value);
 			
-	    return(okResult);
+	    return okResult;
 		}
 	
 		public static bool AddDelete1()
@@ -85,7 +85,7 @@ namespace Cassowary.Tests
 			okResult = okResult && Cl.Approx(x,100.0);
 			Console.WriteLine("x == " + x.Value);
 
-			return(okResult);
+			return okResult;
 		}	
 
 		public static bool AddDelete2()

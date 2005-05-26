@@ -63,7 +63,7 @@ namespace Cassowary
 			s += string.Format("\nColumns: {0}", _columns.Count);
 			s += string.Format("\nInfeasible Rows: {0}", _infeasibleRows.Count);
 			s += string.Format("\nExternal basic variables: {0}", _externalRows.Count);
-			s += string.Format("\nExternal parametric variables: {0}\n", _externalParametricVars.Count);
+			s += string.Format("\nExternal parametric variables: {0}", _externalParametricVars.Count);
 		    
 			return s;
 		}
@@ -81,8 +81,8 @@ namespace Cassowary
 			s += string.Format("\nColumns:\n{0}", _columns.ToString());
 			s += string.Format("\nInfeasible rows: {0}", _infeasibleRows.ToString());
 
-			s += string.Format("External basic variables: {0}", _externalRows.ToString());
-			s += string.Format("External parametric variables: {0}", _externalParametricVars.ToString());
+			s += string.Format("\nExternal basic variables: {0}", _externalRows.ToString());
+			s += string.Format("\nExternal parametric variables: {0}", _externalParametricVars.ToString());
 			    
 			return s;
 		}

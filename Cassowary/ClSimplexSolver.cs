@@ -101,7 +101,8 @@ namespace Cassowary
 					// could not add directly
 					AddWithArtificialVariable(expr);
 				}
-			} catch (ExClRequiredFailure rf)
+			} 
+			catch (ExClRequiredFailure rf)
 			{
 				throw rf;
 			}
@@ -963,6 +964,7 @@ namespace Cassowary
 						if (!foundNewRestricted && !v.IsDummy && c < 0.0)
 						{
 							Set col = (Set) _columns[v];
+
 							if ( col == null ||
 									 (col.Count == 1 && ColumnsHasKey(_objective)) ) 
 							{

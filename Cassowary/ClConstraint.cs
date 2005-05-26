@@ -71,7 +71,7 @@ namespace Cassowary
 			// a format expression in brackets!
 			//
 			// example output: weak:[0,0,1] {1} {23 + -1*[update.height:23]}
-			return string.Format("{0} {{{1}}} {{{2}}}", Strength, Weight, Expression);
+			return string.Format("{0} {{{1}}} ({2}", Strength, Weight, Expression);
 		}
 
 		private ClStrength _strength;

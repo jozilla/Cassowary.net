@@ -21,6 +21,12 @@ namespace Cassowary
 			_variable = var;
 		}
 
+		public override string ToString()
+		{
+			// add missing bracket
+			return base.ToString() + ")";
+		}
+		
 		public ClVariable Variable
 		{
 			get { return _variable; }
