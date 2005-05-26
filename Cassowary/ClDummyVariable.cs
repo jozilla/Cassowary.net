@@ -35,7 +35,7 @@ namespace Cassowary
 
 		public override bool IsRestricted
 		{
-			get { return false; }
+			get { return true; }
 		}
 	}
 }
