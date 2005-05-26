@@ -125,7 +125,29 @@ namespace Cassowary.Tests
 			okResult = okResult && Cl.Approx(x, 100.0) && Cl.Approx(y, 120.0);
 			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
 				
-			return(okResult);
+			return okResult;
+		}
+
+		public static bool Inconsistent1()
+		{
+			try 
+			{
+				ClVariable x = new ClVariable("x");
+				ClSimplexSolver solver = new ClSimplexSolver();
+				
+				solver
+					.AddConstraint( new ClLinearEquation(x, 10.0) )
+					.AddConstraint( new ClLinearEquation(x, 5.0) );
+				
+				// no exception, we failed!
+				return false;
+			} 
+			catch (ExClRequiredFailure rf)
+			{
+				// we want this exception to get thrown
+				Console.WriteLine("-- got the exception");
+				return true;
+			}
 		}
 						
 		[STAThread]
@@ -177,6 +199,18 @@ namespace Cassowary.Tests
 			////////////////////////// AddDelete2 ////////////////////////// 
 			Console.WriteLine("\nAddDelete2:");
       result = AddDelete2(); 
+			allOkResult &= result;
+			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (Cl.cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
+			////////////////////////// Inconsistent1 ////////////////////////// 
+			Console.WriteLine("\nInconsistent1:");
+      result = Inconsistent1(); 
 			allOkResult &= result;
 			
 			if (!result) 
