@@ -87,6 +87,46 @@ namespace Cassowary.Tests
 
 			return(okResult);
 		}	
+
+		public static bool AddDelete2()
+  	{
+			bool okResult = true; 
+			ClVariable x = new ClVariable("x");
+			ClVariable y = new ClVariable("y");
+			ClSimplexSolver solver = new ClSimplexSolver();
+
+			solver
+				.AddConstraint( new ClLinearEquation(x, 100.0, ClStrength.Weak))
+				.AddConstraint( new ClLinearEquation(y, 120.0, ClStrength.Strong));
+				
+			ClLinearInequality c10 = new ClLinearInequality(x,Cl.LEQ, 10.0);
+			ClLinearInequality c20 = new ClLinearInequality(x,Cl.LEQ, 20.0);
+				
+			solver
+				.AddConstraint(c10)
+				.AddConstraint(c20);
+			okResult = okResult && Cl.Approx(x, 10.0) && Cl.Approx(y, 120.0);
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+
+			solver.RemoveConstraint(c10);
+			okResult = okResult && Cl.Approx(x, 20.0) && Cl.Approx(y, 120.0);
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+		 
+			ClLinearEquation cxy = new ClLinearEquation( Cl.Times(2.0, x), y);
+			solver.AddConstraint(cxy);
+			okResult = okResult && Cl.Approx(x, 20.0) && Cl.Approx(y, 40.0);
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+
+			solver.RemoveConstraint(c20);
+			okResult = okResult && Cl.Approx(x, 60.0) && Cl.Approx(y, 120.0);
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+
+			solver.RemoveConstraint(cxy);
+			okResult = okResult && Cl.Approx(x, 100.0) && Cl.Approx(y, 120.0);
+			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
+				
+			return(okResult);
+		}
 						
 		[STAThread]
 		static void Main(string[] args)
@@ -125,6 +165,18 @@ namespace Cassowary.Tests
 			////////////////////////// AddDelete1 ////////////////////////// 
 			Console.WriteLine("\nAddDelete1:");
       result = AddDelete1(); 
+			allOkResult &= result;
+			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (Cl.cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
+			////////////////////////// AddDelete2 ////////////////////////// 
+			Console.WriteLine("\nAddDelete2:");
+      result = AddDelete2(); 
 			allOkResult &= result;
 			
 			if (!result) 

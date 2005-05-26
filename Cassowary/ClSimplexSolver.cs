@@ -1424,6 +1424,7 @@ namespace Cassowary
 
 			// BUG: why retrieve with var as key?
 			Set cnset = (Set) _errorVars[var];
+			//Set cnset = (Set) _errorVars[cn];
 			if (cnset == null)
 				// BUG: overwrite?
 				//_errorVars.Add(cn, cnset = new Set());
