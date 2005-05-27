@@ -5,8 +5,13 @@ namespace Cassowary.Tests
 	/// <summary>
 	/// Cassowary test class.
 	/// </summary>
-	public class ClTests
+	public class ClTests : Cl
 	{
+		public ClTests()
+		{
+			_rnd = new Random(123456789);
+		}
+		
 		public static bool Simple1()
 		{
 			bool okResult = true;
@@ -268,6 +273,156 @@ namespace Cassowary.Tests
 				return true;
 			}
   	}
+
+		public static bool Inconsistent3()
+		{
+			try 
+			{
+				ClVariable w = new ClVariable("w");
+				ClVariable x = new ClVariable("x");
+				ClVariable y = new ClVariable("y");
+				ClVariable z = new ClVariable("z");
+				ClSimplexSolver solver = new ClSimplexSolver();
+				
+				solver
+					.AddConstraint( new ClLinearInequality(w, Cl.GEQ, 10.0) )
+					.AddConstraint( new ClLinearInequality(x, Cl.GEQ, w) )
+					.AddConstraint( new ClLinearInequality(y, Cl.GEQ, x) )
+					.AddConstraint( new ClLinearInequality(z, Cl.GEQ, y) )
+					.AddConstraint( new ClLinearInequality(z, Cl.GEQ, 8.0) )
+					.AddConstraint( new ClLinearInequality(z, Cl.LEQ, 4.0) );
+
+				// no exception, we failed!
+				return false;
+			} 
+			catch (ExClRequiredFailure err)
+			{
+				// we want this exception to get thrown
+				Console.WriteLine("-- got the exception");
+				return true;
+			}
+		}
+
+		public static bool AddDel(int nCns, int nVars, int nResolves)
+		{
+			Timer timer = new Timer();
+			double ineqProb = 0.12;
+			int maxVars = 3;
+
+			Console.WriteLine("starting timing test. nCns = " + nCns +
+					", nVars = " + nVars + ", nResolves = " + nResolves);
+			
+			timer.Start();
+			ClSimplexSolver solver = new ClSimplexSolver();
+
+			ClVariable[] rgpclv = new ClVariable[nVars];
+			for (int i = 0; i < nVars; i++) {
+				rgpclv[i] = new ClVariable(i, "x");
+				solver.AddStay(rgpclv[i]);
+			}
+
+			ClConstraint[] rgpcns = new ClConstraint[nCns];
+			int nvs = 0;
+			int k;
+			int j;
+			double coeff;
+			for (j = 0; j < nCns; j++) {
+				// number of variables in this constraint
+				nvs = RandomInRange(1, maxVars);
+				ClLinearExpression expr = new ClLinearExpression(UniformRandomDiscretized() * 20.0 - 10.0);
+				for (k = 0; k < nvs; k++) {
+					coeff = UniformRandomDiscretized()*10 - 5;
+					int iclv = (int) (UniformRandomDiscretized()*nVars);
+					expr.AddExpression(Cl.Times(rgpclv[iclv], coeff));
+				}
+				if (UniformRandomDiscretized() < ineqProb) {
+					rgpcns[j] = new ClLinearInequality(expr);
+				} else {  
+					rgpcns[j] = new ClLinearEquation(expr);
+				}
+				if (cTraceOn) 
+					TracePrint("Constraint " + j + " is " + rgpcns[j]);
+			}
+
+			Console.WriteLine("done building data structures");
+			Console.WriteLine("time = " + timer.ElapsedTime);
+			timer.Start();
+			int cExceptions = 0;
+			for (j = 0; j < nCns; j++) {
+				// add the constraint -- if it's incompatible, just ignore it
+				try
+				{
+					solver.AddConstraint(rgpcns[j]);
+				}
+				catch (ExClRequiredFailure err)
+				{
+					cExceptions++;
+					if (cTraceOn) 
+						TracePrint("got exception adding " + rgpcns[j]);
+					
+					rgpcns[j] = null;
+				}
+			}
+			Console.WriteLine("done adding constraints [" + cExceptions + " exceptions]");
+			Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+			timer.Start();
+
+			int e1Index = (int) (UniformRandomDiscretized()*nVars);
+			int e2Index = (int) (UniformRandomDiscretized()*nVars);
+
+			Console.WriteLine("indices " + e1Index + ", " + e2Index);
+			
+			ClEditConstraint edit1 = new ClEditConstraint(rgpclv[e1Index],ClStrength.Strong);
+			ClEditConstraint edit2 = new ClEditConstraint(rgpclv[e2Index],ClStrength.Strong);
+
+		 solver
+			 .AddConstraint(edit1)
+			 .AddConstraint(edit2);
+
+		 Console.WriteLine("done creating edit constraints -- about to start resolves");
+		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+		 timer.Start();
+
+		 for (int m = 0; m < nResolves; m++)
+		 {
+			 solver.Resolve(rgpclv[e1Index].Value * 1.001,
+					 rgpclv[e2Index].Value * 1.001);
+		 }
+
+		 Console.WriteLine("done resolves -- now removing constraints");
+		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+
+		 solver.RemoveConstraint(edit1);
+		 solver.RemoveConstraint(edit2);
+
+		 timer.Start();
+
+		 for (j = 0; j < nCns; j++)
+		 {
+			 if (rgpcns[j] != null)
+			 {
+				 solver.RemoveConstraint(rgpcns[j]);
+			 }
+		 }
+
+		 Console.WriteLine("done removing constraints and addDel timing test");
+		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+
+		 timer.Start();
+		 
+		 return true;
+		}
+		
+		public static double UniformRandomDiscretized()
+		{
+			double n = Math.Abs(_rnd.Next());
+			return n / int.MaxValue;
+		}
+		
+		public static int RandomInRange(int low, int high)
+		{
+			return (int) UniformRandomDiscretized()*(high-low)+low;
+		}
 		
 		[STAThread]
 		static void Main(string[] args)
@@ -287,7 +442,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
 			////////////////////////// JustStay1 ////////////////////////// 
@@ -300,7 +455,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
 			////////////////////////// AddDelete1 ////////////////////////// 
@@ -312,7 +467,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
 			////////////////////////// AddDelete2 ////////////////////////// 
@@ -324,7 +479,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
 			////////////////////////// Casso1 ////////////////////////// 
@@ -336,7 +491,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
 			////////////////////////// Inconsistent1 ////////////////////////// 
@@ -348,7 +503,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 			
 			////////////////////////// Inconsistent2 ////////////////////////// 
@@ -360,9 +515,21 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
+			////////////////////////// Inconsistent3 ////////////////////////// 
+			Console.WriteLine("\nInconsistent3:");
+      result = Inconsistent3(); 
+			allOkResult &= result;
 			
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
 			////////////////////////// Multiedit ////////////////////////// 
 			Console.WriteLine("\nMultiedit:");
       result = Multiedit(); 
@@ -372,8 +539,34 @@ namespace Cassowary.Tests
 				Console.WriteLine("--> Failed!");
 			else
 				Console.WriteLine("--> Succeeded!");
-			if (Cl.cGC) 
+			if (cGC) 
+				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
+
+			////////////////////////// AddDel ////////////////////////// 
+			Console.WriteLine("\nAddDel:");
+
+      int cns = 900, vars = 900, resolves = 10000;
+
+      if (args.Length > 0)
+        cns = int.Parse(args[0]);
+
+      if (args.Length > 1)
+        vars = int.Parse(args[1]);
+
+      if (args.Length > 2)
+        resolves = int.Parse(args[2]);
+
+      result = AddDel(cns, vars, resolves);
+      allOkResult &= result;
+      
+			if (!result) 
+				Console.WriteLine("--> Failed!");
+			else
+				Console.WriteLine("--> Succeeded!");
+			if (cGC) 
 				Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 		}
+
+		private static Random _rnd;
 	}
 }
