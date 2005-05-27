@@ -30,7 +30,7 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Cassowary")]
-[assembly: AssemblyDescription("A constraint solving toolkit")]
+[assembly: AssemblyDescription("An incremental constraint solver for .NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]

@@ -51,7 +51,6 @@ namespace Cassowary
 		public ClVariable Variable
 		{
 			get { return _variable; }
-			private set { _variable = value; }
 		}
 
 		public override ClLinearExpression Expression
