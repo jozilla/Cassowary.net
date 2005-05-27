@@ -426,7 +426,7 @@ namespace Cassowary.Tests
 			 }
 		 }
 
-		 Console.WriteLine("done removing constraints and addDel timing test");
+		 Console.WriteLine("done removing constraints and AddDel timing test");
 		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
 
 		 timer.Start();
