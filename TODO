@@ -1,7 +1,6 @@
 Bug squashing:
-	* get LayoutTest.exe working
 	* provide Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
-		these instead of their ToString() methods in GetInternalInfo() en other 
+		these instead of their ToString() methods in GetInternalInfo() and other 
 		trace prints 
 
 Improvements:
@@ -13,4 +12,5 @@ Improvements:
 	* documentation
 		- check for formatting errors
 		- complete the documentation
-	* unit tests
+		- generate MSDN style online documentation using NDoc
+	* unit tests with NUnit

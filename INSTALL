@@ -1,0 +1,13 @@
+To build the .dll file, just run:
+
+$ make lib
+
+To build the tests:
+
+$ make tests
+
+Or to build both, just type:
+
+$ make
+
+You will need a recent version of Mono and the Mono C# compiler.
