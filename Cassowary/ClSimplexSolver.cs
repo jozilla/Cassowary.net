@@ -254,47 +254,35 @@ namespace Cassowary
 		{
 			// HACK: to be able to remove elements from _editVarMap,
 			// which will be done by RemoveEditVar(...).
-			// 
+			//
 			// C# enumerators do not allow this, because they
 			// only take a snapshot of the collection. If the collection
 			// changes (by removing an element for example), the
 			// enumerator gets out of sync, and an 
-			// InvalidOperationException will be thrown. We catch
-			// this exception and then start the iteration all over again.
-			// This is possible by wrapping the normal code in a so-called
-			// infinite loop.
-			// However, the while loop will not loop forever! Eventually we 
-			// will get at the end of the list, and we will return. 
-			// It is also possible that we'll throw an ExClInternalError
-			// exception if something went wrong, but this function
-			// will always end!
+			// InvalidOperationException will be thrown. 
+			// 
+			// We thus create a copy of the _editVarMap to iterate
+			// through.
+			Hashtable editVarMapCopy = (Hashtable) _editVarMap.Clone();
 			
-			while (true)
+			try
 			{
-				try
+				foreach (ClVariable v in editVarMapCopy.Keys)
 				{
-					foreach (ClVariable v in _editVarMap.Keys)
+					ClEditInfo cei = (ClEditInfo) editVarMapCopy[v];
+					if (cei.Index >= n)
 					{
-						ClEditInfo cei = (ClEditInfo) _editVarMap[v];
-						if (cei.Index >= n)
-						{
-							RemoveEditVar(v);
-						}
+						RemoveEditVar(v);
 					}
-					Assert(_editVarMap.Count == n, "_editVarMap.Count == n");
-	
-					return this;
-				} 
-				catch (InvalidOperationException ioe)
-				{
-					// go back to start of function after remove
-					continue;
 				}
-				catch (ExClConstraintNotFound cnf)
-				{
-					// should not get this
-					throw new ExClInternalError("Constraint not found in RemoveEditVarsTo");
-				}
+				Assert(_editVarMap.Count == n, "_editVarMap.Count == n");
+
+				return this;
+			} 
+			catch (ExClConstraintNotFound cnf)
+			{
+				// should not get this
+				throw new ExClInternalError("Constraint not found in RemoveEditVarsTo");
 			}
 		}
 
