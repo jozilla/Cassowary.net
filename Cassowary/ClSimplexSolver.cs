@@ -252,24 +252,49 @@ namespace Cassowary
 		public ClSimplexSolver RemoveEditVarsTo(int n)
 			/* throws ExClInternalError */
 		{
-			try
+			// HACK: to be able to remove elements from _editVarMap,
+			// which will be done by RemoveEditVar(...).
+			// 
+			// C# enumerators do not allow this, because they
+			// only take a snapshot of the collection. If the collection
+			// changes (by removing an element for example), the
+			// enumerator gets out of sync, and an 
+			// InvalidOperationException will be thrown. We catch
+			// this exception and then start the iteration all over again.
+			// This is possible by wrapping the normal code in a so-called
+			// infinite loop.
+			// However, the while loop will not loop forever! Eventually we 
+			// will get at the end of the list, and we will return. 
+			// It is also possible that we'll throw an ExClInternalError
+			// exception if something went wrong, but this function
+			// will always end!
+			
+			while (true)
 			{
-				foreach (ClVariable v in _editVarMap.Keys)
+				try
 				{
-					ClEditInfo cei = (ClEditInfo) _editVarMap[v];
-					if (cei.Index >= n)
+					foreach (ClVariable v in _editVarMap.Keys)
 					{
-						RemoveEditVar(v);
+						ClEditInfo cei = (ClEditInfo) _editVarMap[v];
+						if (cei.Index >= n)
+						{
+							RemoveEditVar(v);
+						}
 					}
+					Assert(_editVarMap.Count == n, "_editVarMap.Count == n");
+	
+					return this;
+				} 
+				catch (InvalidOperationException ioe)
+				{
+					// go back to start of function after remove
+					continue;
 				}
-				Assert(_editVarMap.Count == n, "_editVarMap.Count == n");
-
-				return this;
-			} 
-			catch (ExClConstraintNotFound cnf)
-			{
-				// should not get this
-				throw new ExClInternalError("Constraint not found in RemoveEditVarsTo");
+				catch (ExClConstraintNotFound cnf)
+				{
+					// should not get this
+					throw new ExClInternalError("Constraint not found in RemoveEditVarsTo");
+				}
 			}
 		}
 
