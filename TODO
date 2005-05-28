@@ -1,4 +1,5 @@
 Bug squashing:
+	* fix bug in ClSimplexSolver#InsertErrorVar(...), marked with BUG keyword
 	* provide Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
 		these instead of their ToString() methods in GetInternalInfo() and other 
 		trace prints 

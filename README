@@ -24,6 +24,9 @@ Acknowledgements
 I would like to thank the people of the Constraints Research Group at the 
 University of Washington [4] for their original Cassowary solver.
 
+Special thanks go to Greg J. Badros for taking the time to answer my 
+questions and providing useful insights in the behavior of the solver.
+
 ----
 [1] http://www.cs.washington.edu/research/constraints/cassowary/
 [2] http://www.uhasselt.be/
