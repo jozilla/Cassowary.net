@@ -1,13 +1,24 @@
-To build the .dll file, just run:
+Note: these installation instructions are for UNIX systems.
+			You will need a recent version of Mono and the Mono C# compiler.
+			To use the library, place it in your project directory and link with it.
+
+To build the Cassowary.dll library, just run:
 
 $ make lib
 
-To build the tests:
+To build ClTests.exe:
+
+$ make cltests
+
+To build LayoutTest.exe:
+
+$ make layout_test
+
+To build all tests:
 
 $ make tests
 
-Or to build both, just type:
+Or to build both the library and the tests, just type:
 
 $ make
 
-You will need a recent version of Mono and the Mono C# compiler.
