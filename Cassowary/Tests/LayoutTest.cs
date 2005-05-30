@@ -220,7 +220,9 @@ namespace Cassowary.Tests
 			_solver.AddStay(l_body_height);
 			_solver.AddStay(l_body_width);
 			_solver.AddStay(blogentry_height);
-			_solver.AddStay(blogentry_width);
+			// let's keep blogentry.width in favor of other stay constraints!
+			// remember we later specify title.width to be equal to blogentry.width
+			_solver.AddStay(blogentry_width, ClStrength.Strong);
 			_solver.AddStay(l_recent_height);
 			_solver.AddStay(l_recent_width);
 			_solver.AddStay(articles_height);
@@ -401,6 +403,12 @@ namespace Cassowary.Tests
 			_solver.AddConstraint(new ClLinearInequality(left_right, Cl.LEQ, right_left, ClStrength.Strong));
 			//_solver.AddConstraint(new ClLinearEquation(left_height, new ClLinearExpression(right_height), ClStrength.Strong));
 			//_solver.AddConstraint(new ClLinearEquation(fr_height, new ClLinearExpression(right_height), ClStrength.Strong));
+			
+			// alignment
+			_solver.AddConstraint(new ClLinearEquation(l_title_left, new ClLinearExpression(title_left), ClStrength.Strong));
+			_solver.AddConstraint(new ClLinearEquation(title_left, new ClLinearExpression(blogentry_left), ClStrength.Strong));
+			_solver.AddConstraint(new ClLinearEquation(l_body_left, new ClLinearExpression(blogentry_left), ClStrength.Strong));
+			_solver.AddConstraint(new ClLinearEquation(l_recent_left, new ClLinearExpression(articles_left), ClStrength.Strong));
 		}
 		
 		protected static void PrintVariables()
