@@ -51,25 +51,25 @@ namespace Cassowary.Tests
 		}
 		
 		public static bool JustStay1()
-  	{
-	    bool okResult = true;
-	    ClVariable x = new ClVariable(5);
-	    ClVariable y = new ClVariable(10);
-	    ClSimplexSolver solver = new ClSimplexSolver();
-	      
-	    solver.AddStay(x);
-	    solver.AddStay(y);
-	    okResult = okResult && Cl.Approx(x,5);
-	    okResult = okResult && Cl.Approx(y,10);
+		{
+			bool okResult = true;
+	    		ClVariable x = new ClVariable(5);
+	    		ClVariable y = new ClVariable(10);
+	    		ClSimplexSolver solver = new ClSimplexSolver();
 	    
-			Console.WriteLine("x == " + x.Value);
-	    Console.WriteLine("y == " + y.Value);
+	    		solver.AddStay(x);
+	    		solver.AddStay(y);
+	    		okResult = okResult && Cl.Approx(x,5);
+	    		okResult = okResult && Cl.Approx(y,10);
+	    
+	    		Console.WriteLine("x == " + x.Value);
+			Console.WriteLine("y == " + y.Value);
 			
-	    return okResult;
+	    		return okResult;
 		}
 	
 		public static bool AddDelete1()
-  	{
+		{
 			bool okResult = true; 
 			ClVariable x = new ClVariable("x");
 			ClSimplexSolver solver = new ClSimplexSolver();
@@ -115,7 +115,7 @@ namespace Cassowary.Tests
 		}	
 
 		public static bool AddDelete2()
-  	{
+		{
 			bool okResult = true; 
 			ClVariable x = new ClVariable("x");
 			ClVariable y = new ClVariable("y");
@@ -155,7 +155,7 @@ namespace Cassowary.Tests
 		}
 	
 		public static bool Casso1()
-  	{
+		{
 			bool okResult = true; 
 			ClVariable x = new ClVariable("x");
 			ClVariable y = new ClVariable("y");
@@ -165,8 +165,7 @@ namespace Cassowary.Tests
 				.AddConstraint( new ClLinearInequality(x, Cl.LEQ, y) )
 				.AddConstraint( new ClLinearEquation(y, Cl.Plus(x, 3.0)) )
 				.AddConstraint( new ClLinearEquation(x, 10.0, ClStrength.Weak) )
-				.AddConstraint( new ClLinearEquation(y, 10.0, ClStrength.Weak) )
-				;
+				.AddConstraint( new ClLinearEquation(y, 10.0, ClStrength.Weak) );
 		 
 			okResult = okResult && 
 				( Cl.Approx(x,10.0) && Cl.Approx(y,13.0) ||
@@ -175,7 +174,7 @@ namespace Cassowary.Tests
 			Console.WriteLine("x == " + x.Value + ", y == " + y.Value);
 			
 			return okResult;
-  	} 
+		} 
   
 		public static bool Inconsistent1()
 		{
@@ -293,7 +292,7 @@ namespace Cassowary.Tests
 				Console.WriteLine("-- got the exception");
 				return true;
 			}
-  	}
+		}
 
 		public static bool Inconsistent3()
 		{
@@ -396,42 +395,42 @@ namespace Cassowary.Tests
 			ClEditConstraint edit1 = new ClEditConstraint(rgpclv[e1Index],ClStrength.Strong);
 			ClEditConstraint edit2 = new ClEditConstraint(rgpclv[e2Index],ClStrength.Strong);
 
-		 solver
-			 .AddConstraint(edit1)
-			 .AddConstraint(edit2);
+			solver
+				.AddConstraint(edit1)
+				.AddConstraint(edit2);
 
-		 Console.WriteLine("done creating edit constraints -- about to start resolves");
-		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
-		 timer.Start();
+			Console.WriteLine("done creating edit constraints -- about to start resolves");
+			Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+			timer.Start();
 
-		 for (int m = 0; m < nResolves; m++)
-		 {
-			 solver.Resolve(rgpclv[e1Index].Value * 1.001,
-					 rgpclv[e2Index].Value * 1.001);
-		 }
+			for (int m = 0; m < nResolves; m++)
+			{
+			       	solver.Resolve(rgpclv[e1Index].Value * 1.001,
+														 rgpclv[e2Index].Value * 1.001);
+			}
 
-		 Console.WriteLine("done resolves -- now removing constraints");
-		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+			Console.WriteLine("done resolves -- now removing constraints");
+			Console.WriteLine("time = " + timer.ElapsedTime + "\n");
+			
+			solver.RemoveConstraint(edit1);
+			solver.RemoveConstraint(edit2);
 
-		 solver.RemoveConstraint(edit1);
-		 solver.RemoveConstraint(edit2);
+			timer.Start();
 
-		 timer.Start();
+			for (j = 0; j < nCns; j++)
+			{
+				if (rgpcns[j] != null)
+				{
+				       	solver.RemoveConstraint(rgpcns[j]);
+				}
+			}
+			
+			Console.WriteLine("done removing constraints and AddDel timing test");
+			Console.WriteLine("time = " + timer.ElapsedTime + "\n");
 
-		 for (j = 0; j < nCns; j++)
-		 {
-			 if (rgpcns[j] != null)
-			 {
-				 solver.RemoveConstraint(rgpcns[j]);
-			 }
-		 }
-
-		 Console.WriteLine("done removing constraints and AddDel timing test");
-		 Console.WriteLine("time = " + timer.ElapsedTime + "\n");
-
-		 timer.Start();
+			timer.Start();
 		 
-		 return true;
+			return true;
 		}
 		
 		public static double UniformRandomDiscretized()
@@ -481,7 +480,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// AddDelete1 ////////////////////////// 
 			Console.WriteLine("\nAddDelete1:");
-      result = AddDelete1(); 
+			result = AddDelete1(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -493,7 +492,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// AddDelete2 ////////////////////////// 
 			Console.WriteLine("\nAddDelete2:");
-      result = AddDelete2(); 
+			result = AddDelete2(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -505,7 +504,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// Casso1 ////////////////////////// 
 			Console.WriteLine("\nCasso1:");
-      result = Casso1(); 
+			result = Casso1(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -517,7 +516,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// Inconsistent1 ////////////////////////// 
 			Console.WriteLine("\nInconsistent1:");
-      result = Inconsistent1(); 
+			result = Inconsistent1(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -529,7 +528,7 @@ namespace Cassowary.Tests
 			
 			////////////////////////// Inconsistent2 ////////////////////////// 
 			Console.WriteLine("\nInconsistent2:");
-      result = Inconsistent2(); 
+			result = Inconsistent2(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -541,7 +540,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// Inconsistent3 ////////////////////////// 
 			Console.WriteLine("\nInconsistent3:");
-      result = Inconsistent3(); 
+			result = Inconsistent3(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -553,7 +552,7 @@ namespace Cassowary.Tests
 
 			////////////////////////// Multiedit ////////////////////////// 
 			Console.WriteLine("\nMultiedit:");
-      result = Multiedit(); 
+			result = Multiedit(); 
 			allOkResult &= result;
 			
 			if (!result) 
@@ -566,19 +565,19 @@ namespace Cassowary.Tests
 			////////////////////////// AddDel ////////////////////////// 
 			Console.WriteLine("\nAddDel:");
 
-      int cns = 900, vars = 900, resolves = 10000;
+			int cns = 900, vars = 900, resolves = 10000;
 
-      if (args.Length > 0)
-        cns = int.Parse(args[0]);
+			if (args.Length > 0)
+				cns = int.Parse(args[0]);
 
-      if (args.Length > 1)
-        vars = int.Parse(args[1]);
+			if (args.Length > 1)
+				vars = int.Parse(args[1]);
 
-      if (args.Length > 2)
-        resolves = int.Parse(args[2]);
+			if (args.Length > 2)
+				resolves = int.Parse(args[2]);
 
-      result = AddDel(cns, vars, resolves);
-      allOkResult &= result;
+			result = AddDel(cns, vars, resolves);
+			allOkResult &= result;
       
 			if (!result) 
 				Console.WriteLine("--> Failed!");
