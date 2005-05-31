@@ -17,4 +17,5 @@ Improvements:
 		- check for formatting errors
 		- complete the documentation
 		- generate MSDN style online documentation using NDoc
-	* unit tests with NUnit
+	* testing
+		- unit tests with NUnit
