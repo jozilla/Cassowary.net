@@ -1,5 +1,5 @@
 Bug squashing:
-	* provide Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
+	* implement Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
 		these instead of their ToString() methods in GetInternalInfo() and other 
 		trace prints 
 
