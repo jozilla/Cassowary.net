@@ -20,6 +20,7 @@
 */
 
 using System;
+using System.Collections;
 
 namespace Cassowary
 {
@@ -183,6 +184,16 @@ namespace Cassowary
 		static bool Approx(double a, ClVariable clv)
 		{
 			return Approx(a, clv.Value);
+		}
+
+		public static void PrintHashtable(Hashtable h)
+		{
+			// TODO
+		}
+
+		public static void PrintArrayList(ArrayList a)
+		{
+			// TODO
 		}
 	}
 }
