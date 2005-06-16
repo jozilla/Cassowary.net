@@ -1,4 +1,5 @@
 0.2 -- <not yet released>:
+	* Added missing constructor ClStayConstraint(ClVariable var).
 	* Fixed bug in ClSimplexSolver#InsertErrorVar(...).
 	* Added extra constraints to LayoutTest class (to eliminate random behavior).
 
