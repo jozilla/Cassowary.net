@@ -33,6 +33,10 @@ namespace Cassowary
 			: base(var, strength, 1.0)
 		{}
 
+		public ClStayConstraint(ClVariable var)
+			: base(var, ClStrength.Weak, 1.0)
+		{}
+
 		public override bool IsStayConstraint
 		{
 			get { return true; }
