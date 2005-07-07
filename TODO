@@ -1,21 +1,21 @@
 Bug squashing:
-	* implement Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
-		these instead of their ToString() methods in GetInternalInfo() and other 
-		trace prints 
+  * implement Cl.PrintHashtable() and Cl.PrintArrayList() methods, and use 
+    these instead of their ToString() methods in GetInternalInfo() and other 
+    trace prints 
 
 Improvements:
-	* make better use of C#/.NET's features, e.g.
-		- provide implicit cast operators between ClVariable and ClLinearExpression,
-			to eliminate the need for wrapping too much in ClLinearExpressions
-		- provide operator overloads for operations on expressions, variables,
-		  constraints, symbolic weights, etc.
-		- use #ifdef for trace and debug modes instead of bool constants
-		- use .NET's built-in assert function instead of Cl.Assert
-		- let classes such as ClStrength and ClSymbolicWeight implement the
-			IComparable interface
-	* documentation
-		- check for formatting errors
-		- complete the documentation
-		- generate MSDN style online documentation using NDoc
-	* testing
-		- unit tests with NUnit
+  * make better use of C#/.NET's features, e.g.
+    - provide implicit cast operators between ClVariable and ClLinearExpression,
+      to eliminate the need for wrapping too much in ClLinearExpressions
+    - provide operator overloads for operations on expressions, variables,
+      constraints, symbolic weights, etc.
+    - use #ifdef for trace and debug modes instead of bool constants
+    - use .NET's built-in assert function instead of Cl.Assert
+    - let classes such as ClStrength and ClSymbolicWeight implement the
+      IComparable interface
+  * documentation
+    - check for formatting errors
+    - complete the documentation
+    - generate MSDN style online documentation using NDoc
+  * testing
+    - unit tests with NUnit

@@ -1,6 +1,6 @@
 Note: these installation instructions are for UNIX systems.
-			You will need a recent version of Mono and the Mono C# compiler.
-			To use the library, place it in your project directory and link with it.
+      You will need a recent version of Mono and the Mono C# compiler.
+      To use the library, place it in your project directory and link with it.
 
 To build the Cassowary.dll library, just run:
 
