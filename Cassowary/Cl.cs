@@ -194,14 +194,46 @@ namespace Cassowary
 		  return Approx(a, clv.Value);
 		}
 
-		public static void PrintHashtable(Hashtable h)
+		public static string HashtableToString(Hashtable h)
 		{
-		  // TODO
+		  string result = "{";
+		  
+		  bool first = true;
+		  foreach (object k in h.Keys)
+		  {
+		    if (first)
+		      first = false;
+		    else
+		    {
+		      result += ", ";
+		    }
+		    
+		    result += k.ToString() + " => " + h[k].ToString();
+		  }
+		  
+		  result += "}";
+		  return result;
 		}
 
-		public static void PrintArrayList(ArrayList a)
+		public static string ArrayListToString(ArrayList a)
 		{
-			// TODO
+		  string result = "{";
+		  
+		  bool first = true;
+		  foreach (object o in a)
+		  {
+		    if (first)
+		      first = false;
+		    else
+		    {
+		      result += ", ";
+	      }
+		      
+		    result += o.ToString();
+		  }
+		  
+		  result += "}";
+		  return result;
 		}
 	}
 }
