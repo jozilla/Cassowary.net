@@ -1,7 +1,6 @@
 0.2 -- <not yet released>:
   * Use Cl.ArrayListToString() and Cl.HashtableToString() methods 
-    instead of their ToString() methods in GetInternalInfo() and other 
-    trace prints 
+    instead of their ToString() methods in trace prints 
   * Added missing constructor ClStayConstraint(ClVariable var).
   * Fixed bug in ClSimplexSolver#InsertErrorVar(...).
   * Added extra constraints to LayoutTest class (to eliminate random behavior).
