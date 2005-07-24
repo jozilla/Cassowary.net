@@ -29,7 +29,13 @@ namespace Cassowary
     public ClLinearExpression(ClAbstractVariable clv, double value, double constant)
     {
       if (Cl.cGC)
-        Console.Error.WriteLine("new ClLinearExpression");
+      {
+        #if !COMPACT
+          Console.Error.WriteLine("new ClLinearExpression");
+        #else
+          Console.WriteLine("new ClLinearExpression");
+        #endif
+      }
 
       _constant = new ClDouble(constant);
       _terms = new Hashtable(1);
@@ -56,7 +62,13 @@ namespace Cassowary
     protected ClLinearExpression(ClDouble constant, Hashtable terms)
     {
       if (Cl.cGC)
-        Console.Error.WriteLine("clone ClLinearExpression");
+      {
+        #if !COMPACT
+          Console.Error.WriteLine("clone ClLinearExpression");
+        #else
+          Console.Error.WriteLine("clone ClLinearExpression");
+        #endif
+      }
       
       _constant = (ClDouble) constant.Clone();
       _terms = new Hashtable();

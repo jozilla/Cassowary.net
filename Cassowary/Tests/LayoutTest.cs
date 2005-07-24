@@ -39,11 +39,19 @@ namespace Cassowary.Tests
       } 
       catch (ExClRequiredFailure rf) 
       {
-        Console.Error.WriteLine(rf.StackTrace);
+        #if !COMPACT
+          Console.Error.WriteLine(rf.StackTrace);
+        #else
+          Console.WriteLine(rf.StackTrace);
+        #endif
       } 
       catch (ExClInternalError ie) 
       {
-        Console.Error.WriteLine(ie.StackTrace);
+        #if !COMPACT
+          Console.Error.WriteLine(ie.StackTrace);
+        #else
+          Console.WriteLine(ie.StackTrace);
+        #endif
       }
       
       // solve it
@@ -53,7 +61,11 @@ namespace Cassowary.Tests
       } 
       catch (ExClInternalError ie) 
       {
-        Console.Error.WriteLine(ie.StackTrace);
+        #if !COMPACT
+          Console.Error.WriteLine(ie.StackTrace);
+        #else
+          Console.WriteLine(ie.StackTrace);
+        #endif
       }
       
       // print out the values

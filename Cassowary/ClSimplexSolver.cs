@@ -695,7 +695,12 @@ namespace Cassowary
       ClEditInfo cei = (ClEditInfo) _editVarMap[v];
       if (cei == null)
       {
-        Console.Error.WriteLine("SuggestValue for variable " + v + ", but var is not an edit variable\n");
+        #if !COMPACT
+          Console.Error.WriteLine("SuggestValue for variable " + v + ", but var is not an edit variable\n");
+        #else
+          Console.WriteLine("SuggestValue for variable " + v + ", but var is not an edit variable\n");
+        #endif
+        
         throw new ExClError();
       }
       int i = cei.Index;
@@ -1429,8 +1434,13 @@ namespace Cassowary
       {
         if (RowExpression(v) != null)
         {
-          Console.Error.WriteLine("Error: variable " + v +
-                                  "in _externalParametricVars is basic");
+          #if !COMPACT
+            Console.Error.WriteLine("Error: variable " + v +
+                                    "in _externalParametricVars is basic");
+          #else
+            Console.WriteLine("Error: variable " + v +
+                              "in _externalParametricVars is basic");
+          #endif
           continue;
         }
         v.ChangeValue(0.0);

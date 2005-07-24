@@ -8,7 +8,6 @@ Improvements:
     - use .NET's built-in assert function instead of Cl.Assert
     - let classes such as ClStrength and ClSymbolicWeight implement the
       IComparable interface
-    - port to Compact .NET framework
   * documentation
     - check for formatting errors
     - complete the documentation

@@ -1,9 +1,10 @@
-0.2 -- <not yet released>:
-  * Use Cl.ArrayListToString() and Cl.HashtableToString() methods 
-    instead of their ToString() methods in trace prints 
+0.1.1 -- <not yet released>:
+  * Trace prints now use Cl.ArrayListToString() and Cl.HashtableToString() 
+    methods instead of ArrayList and Hashtable's own ToString() methods
   * Added missing constructor ClStayConstraint(ClVariable var).
   * Fixed bug in ClSimplexSolver#InsertErrorVar(...).
   * Added extra constraints to LayoutTest class (to eliminate random behavior).
+  * The code now also compiles on Compact .NET (when COMPACT is defined)
 
 0.1 -- 2005-05-27:
   * Initial release.
