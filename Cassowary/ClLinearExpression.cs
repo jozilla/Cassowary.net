@@ -66,7 +66,7 @@ namespace Cassowary
         #if !COMPACT
           Console.Error.WriteLine("clone ClLinearExpression");
         #else
-          Console.Error.WriteLine("clone ClLinearExpression");
+          Console.WriteLine("clone ClLinearExpression");
         #endif
       }
       
