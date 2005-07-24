@@ -1,7 +1,3 @@
-Bug squashing:
-  * use Cl.ArrayListToString() and Cl.HashtableToString() instead of
-    their ToString() methods in GetInternalInfo() and other trace prints 
-
 Improvements:
   * make better use of C#/.NET's features, e.g.
     - provide implicit cast operators between ClVariable and ClLinearExpression,
@@ -12,6 +8,7 @@ Improvements:
     - use .NET's built-in assert function instead of Cl.Assert
     - let classes such as ClStrength and ClSymbolicWeight implement the
       IComparable interface
+    - port to Compact .NET framework
   * documentation
     - check for formatting errors
     - complete the documentation
