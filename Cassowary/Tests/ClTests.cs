@@ -444,7 +444,6 @@ namespace Cassowary.Tests
       return (int) UniformRandomDiscretized()*(high-low)+low;
     }
     
-    [STAThread]
     static void Main(string[] args)
     {
       ClTests clt = new ClTests();

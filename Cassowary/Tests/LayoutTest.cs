@@ -42,7 +42,7 @@ namespace Cassowary.Tests
         #if !COMPACT
           Console.Error.WriteLine(rf.StackTrace);
         #else
-          Console.WriteLine(rf.StackTrace);
+          Console.WriteLine(rf.Message);
         #endif
       } 
       catch (ExClInternalError ie) 
@@ -50,7 +50,7 @@ namespace Cassowary.Tests
         #if !COMPACT
           Console.Error.WriteLine(ie.StackTrace);
         #else
-          Console.WriteLine(ie.StackTrace);
+          Console.WriteLine(ie.Message);
         #endif
       }
       
@@ -64,7 +64,7 @@ namespace Cassowary.Tests
         #if !COMPACT
           Console.Error.WriteLine(ie.StackTrace);
         #else
-          Console.WriteLine(ie.StackTrace);
+          Console.WriteLine(ie.Message);
         #endif
       }
       
