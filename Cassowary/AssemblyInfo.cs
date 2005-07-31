@@ -34,9 +34,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright (C) 2005  Jo Vermeulen (jo@lumumba.uhasselt.be)")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]     
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:

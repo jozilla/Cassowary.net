@@ -14,3 +14,5 @@ Improvements:
     - generate MSDN style online documentation using NDoc
   * testing
     - unit tests with NUnit
+  * security
+    - provide key files with which assemblies can be signed
