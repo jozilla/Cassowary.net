@@ -2,7 +2,7 @@
   Cassowary.net: an incremental constraint solver for .NET
   (http://lumumba.uhasselt.be/jo/projects/cassowary.net/)
   
-  Copyright (C) 2005  Jo Vermeulen (jo@lumumba.uhasselt.be)
+  Copyright (C) 2005  Jo Vermeulen (jo.vermeulen@uhasselt.be)
   
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public License
@@ -34,7 +34,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright (C) 2005  Jo Vermeulen (jo@lumumba.uhasselt.be)")]
+[assembly: AssemblyCopyright("Copyright (C) 2005  Jo Vermeulen (jo.vermeulen@uhasselt.be)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
