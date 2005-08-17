@@ -1,0 +1,47 @@
+/* Constraint specification grammar for Cassowary.net
+ * Author: Jo Vermeulen <jo.vermeulen@uhasselt.be>
+ */
+
+COMPILER Constraint
+
+bool IsComposite()
+{
+  Token next = scanner.Peek();
+  bool result = next.kind == _plus || next.kind == _times || next.kind == _divide;
+
+  return result;
+}
+
+CHARACTERS
+  letter = 'A'..'Z' + 'a'..'z'.
+  specialchar = '_' + '-' + '.'.
+  digit = '0'..'9'. 
+
+TOKENS
+  leq       = "<=".
+  geq       = ">=".
+  eq        = "=".
+  plus      = "+".
+  times     = "*".
+  divide    = "/".
+  minus     = "-".
+  lparen    = "(".
+  rparen    = ")".
+
+  variable  = letter {letter | digit | specialchar}.
+  number    = digit {digit} '.' {digit} ['E' ['+'|'-'] digit {digit}].
+  
+PRODUCTIONS
+
+Constraint  = Expression (eq | geq | leq) Expression
+            .
+            
+            
+Expression  = IF(IsComposite()) Expression (plus | times | divide) Expression
+            | number
+            | variable
+            | minus Expression
+            | lparen Expression rparen
+            .
+
+END Constraint.
