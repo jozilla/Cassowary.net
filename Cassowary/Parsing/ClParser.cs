@@ -18,7 +18,7 @@ public class ClParser
   {
     Rule = rule;
     
-    UnicodeEncoding ue = new UnicodeEncoding();
+    UTF8Encoding ue = new UTF8Encoding();
     byte[] ruleBytes = ue.GetBytes(Rule);
     MemoryStream ms = new MemoryStream(ruleBytes);
 
