@@ -1,7 +1,7 @@
 # Makefile for Unix systems.
 # Requires mcs, the Mono C# compiler.
-# For parsing support, the Coco/R parser generator 
-# is needed.
+# For constraint parsing support, the Coco/R 
+# parser generator is needed.
 # 
 # Author: Jo Vermeulen <jo.vermeulen@uhasselt.be>
 
@@ -10,7 +10,7 @@ WARN_LEVEL = 1
 COCO_CS = cococs
 COCO_CS_FRAMEDIR = ${SRC_DIR}/Parsing/
 
-all: lib tests parser 
+all: lib tests parselib 
 
 lib:
 	@echo "building cassowary library"
@@ -29,7 +29,7 @@ layout_test: lib
 	mcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.LayoutTest -out:LayoutTest.exe -r:Cassowary.dll ${SRC_DIR}/Tests/LayoutTest.cs
 	@echo "done"
 
-parser: lib
+parselib: lib
 	@echo "building constraint parsing library"
 	${COCO_CS} -frames ${COCO_CS_FRAMEDIR} ${SRC_DIR}/Parsing/constraint_grammar.atg
 	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll -r:Cassowary.dll ${SRC_DIR}/Parsing/*.cs

@@ -1,5 +1,8 @@
 Note: these installation instructions are for UNIX systems.
       You will need a recent version of Mono and the Mono C# compiler.
+      In order to compile the constraint parsing library, you need the
+      Coco/R parser generator. 
+      
       To use the library, place it in your project directory and link with it.
 
 To build the Cassowary.dll library, just run:
@@ -17,6 +20,10 @@ $ make layout_test
 To build all tests:
 
 $ make tests
+
+To build the constraint parsing library (Cassowary.Parsing.dll):
+
+$ make parselib
 
 Or to build both the library and the tests, just type:
 
