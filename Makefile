@@ -4,6 +4,8 @@
 
 SRC_DIR = Cassowary
 WARN_LEVEL = 1
+COCO_CS = cococs
+COCO_CS_DIR = /usr/lib/coco-cs/
 
 all: lib tests parser 
 
@@ -25,8 +27,9 @@ layout_test: lib
 	@echo "done"
 
 parser:
-	@echo "building constraint parser"
-	cococs -frames /usr/lib/coco-cs/ ${SRC_DIR}/Parsing/constraint_grammar.atg
+	@echo "building constraint parsing library"
+	${COCO_CS} -frames ${COCO_CS_DIR} ${SRC_DIR}/Parsing/constraint_grammar.atg
+	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll ${SRC_DIR}/Parsing/*.cs
 	@echo "done"
 
 clean:
