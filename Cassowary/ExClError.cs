@@ -29,5 +29,10 @@ namespace Cassowary
     { 
       return "(ExClError) An error has occured in CL";
     }
+
+    public override string ToString()
+    {
+      return Description();
+    }
   }
 }
