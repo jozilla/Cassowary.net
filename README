@@ -18,17 +18,29 @@ I created this software for my Masters thesis at the University of
 Hasselt [2]. More information about my Masters thesis can be found on my 
 homepage [3].
 
+Dependencies
+------------
+
+Cassowary.net only requires a .NET environment, such as the Microsoft .NET 
+platform, or the Mono implementation [4]. To compile Cassowary.net with 
+parsing support, the (freely available) Coco/R parser generator [5] is 
+required.
+
 Acknowledgements
 ----------------
 
 I would like to thank the people of the Constraints Research Group at the 
-University of Washington [4] for their original Cassowary solver.
-
+University of Washington [6] for their original Cassowary solver.
 Special thanks go to Greg J. Badros for taking the time to answer my 
 questions and providing useful insights in the behavior of the solver.
+
+Furthermore, I wish to thank Markus Löberbauer, one of the Coco/R developers,
+for helping me correct the constraint grammar.
 
 ----
 [1] http://www.cs.washington.edu/research/constraints/cassowary/
 [2] http://www.uhasselt.be/
 [3] http://lumumba.uhasselt.be/jo/masters_thesis/
-[4] http://www.cs.washington.edu/research/constraints/
+[4] http://www.mono-project.com/
+[5] http://www.ssw.uni-linz.ac.at/Research/Projects/Coco/
+[6] http://www.cs.washington.edu/research/constraints/
