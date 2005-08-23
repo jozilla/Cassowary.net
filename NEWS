@@ -1,13 +1,15 @@
 0.2 -- <not yet released>
   * Added attribute grammar to generate a constraint parser using Coco/R
+  * Added Cassowary.Parsing.ClParser class, which is able to generate a
+    ClConstraint from a string containing a constraint rule
 
 0.1.1 -- 2005-07-31:
   * Trace prints now use Cl.ArrayListToString() and Cl.HashtableToString() 
     methods instead of ArrayList and Hashtable's own ToString() methods
-  * Added missing constructor ClStayConstraint(ClVariable var).
-  * Fixed bug in ClSimplexSolver#InsertErrorVar(...).
-  * Added extra constraints to LayoutTest class (to eliminate random behavior).
+  * Added missing constructor ClStayConstraint(ClVariable var)
+  * Fixed bug in ClSimplexSolver#InsertErrorVar(...)
+  * Added extra constraints to LayoutTest class (to eliminate random behavior)
   * Now also compiles on Compact .NET (to do so, define COMPACT symbol)
 
 0.1 -- 2005-05-27:
-  * Initial release.
+  * Initial release
