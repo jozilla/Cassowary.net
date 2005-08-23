@@ -28,6 +28,9 @@ public class ClParser
     
     Context = p.Context;
     Result = p.Value;
+
+    if (p.errors.count > 0)
+      throw new ExClParseError(Rule);
   }
 
   public string Rule
