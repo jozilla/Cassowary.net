@@ -46,9 +46,11 @@ CHARACTERS
   digit = '0'..'9'. 
 
 TOKENS
-  leq       = "<=".
-  geq       = ">=".
-  eq        = "=".
+  leq  			= "<=".
+  geq  			= ">=".
+  eq 			  = "=".
+	altleq		= "[=".
+	altgeq		= "]=".
   plus      = "+".
   minus     = "-".
   times     = "*".
@@ -68,9 +70,11 @@ PRODUCTIONS
 Constraint                               (. ClLinearExpression e1, e2; bool eq = false, geq = false, leq = false; .)
 =
 	Expression<out e1> 
-	( eq                                   (. eq = true; .)
-  | geq                                  (. geq = true; .)
-	| leq                                  (. leq = true; .)
+	( eq		                               (. eq = true; .)
+  | geq   		                           (. geq = true; .)
+  | altgeq	   		                       (. geq = true; .)
+	| leq       		                       (. leq = true; .)
+	| altleq	       		                   (. leq = true; .)
 	) 
 	Expression<out e2>                     (.
 	                                          if (eq)
@@ -140,8 +144,8 @@ Variable<out ClVariable v>
                                              }
                                              else
                                              {
-                                               v = new ClVariable(t.val);
-                                               Context.Add(v.Name, v);
+																						 	SemErr("Undefined variable: " + t.val);
+																							v = null;
                                              }
                                            .)
 .

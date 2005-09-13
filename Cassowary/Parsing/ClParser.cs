@@ -9,29 +9,42 @@ public class ClParser
 {
   private string _rule;
   private ClConstraint _result = null;
-  private Hashtable _context = null;
+  private Hashtable _context;
 
-  public ClParser()
-  {}
+	public ClParser()
+	{
+		_context = new Hashtable();
+	}
 
-  public void Parse(string rule)
+	public void Parse(string rule)
+	{
+		Rule = rule;
+		Parse();
+	}
+	
+  public void Parse()
   {
-    Rule = rule;
-    
     UTF8Encoding ue = new UTF8Encoding();
     byte[] ruleBytes = ue.GetBytes(Rule);
     MemoryStream ms = new MemoryStream(ruleBytes);
 
     Scanner s = new Scanner(ms);
     Parser p = new Parser(s);
+		p.Context = Context;
+
     p.Parse();
     
-    Context = p.Context;
-    Result = p.Value;
-
+    _result = p.Value;
+		
     if (p.errors.count > 0)
       throw new ExClParseError(Rule);
   }
+
+	public void AddContext(params ClVariable[] vars)
+	{
+		foreach (ClVariable v in vars)
+			_context.Add(v.Name, v);
+	}
 
   public string Rule
   {
@@ -42,12 +55,10 @@ public class ClParser
   public ClConstraint Result
   {
     get { return _result; }
-    set { _result = value; }
   }
 
   public Hashtable Context
   {
     get { return _context; }
-    set { _context = value; }
   }
 }
