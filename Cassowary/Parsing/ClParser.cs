@@ -46,6 +46,11 @@ public class ClParser
 			_context.Add(v.Name, v);
 	}
 
+	public void AddContext(Hashtable context)
+	{
+		_context = new Hashtable(context);
+	}
+
   public string Rule
   {
     get { return _rule; }
