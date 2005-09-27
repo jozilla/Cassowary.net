@@ -25,7 +25,7 @@ To build the constraint parsing library (Cassowary.Parsing.dll):
 
 $ make parselib
 
-Or to build both the library and the tests, just type:
+Or to build both the libraries and the tests, just type:
 
 $ make
 

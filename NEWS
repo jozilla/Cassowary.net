@@ -1,7 +1,7 @@
 0.2 -- <not yet released>
-  * Added attribute grammar to generate a constraint parser using Coco/R
-  * Added Cassowary.Parsing.ClParser class, which is able to generate a
-    ClConstraint from a string containing a constraint rule
+  * Added constraint rule parsing support. Is compiled into new
+    Cassowary.Parsing assembly. Generating the parser requires Coco/R.
+  * The assemblies are now strongly named by signing them with key files.
 
 0.1.1 -- 2005-07-31:
   * Trace prints now use Cl.ArrayListToString() and Cl.HashtableToString() 

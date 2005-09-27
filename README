@@ -14,8 +14,8 @@ Feedback is always welcome!
 Context
 -------
 
-I created this software for my Masters thesis at the University of 
-Hasselt [2]. More information about my Masters thesis can be found on my 
+I originally created this software for my Masters thesis at the University 
+of Hasselt [2]. More information about my Masters thesis can be found on my 
 homepage [3].
 
 Dependencies
@@ -40,7 +40,7 @@ for helping me correct the constraint grammar.
 ----
 [1] http://www.cs.washington.edu/research/constraints/cassowary/
 [2] http://www.uhasselt.be/
-[3] http://lumumba.uhasselt.be/jo/masters_thesis/
+[3] http://lumumba.uhasselt.be/jo/research/masters_thesis/
 [4] http://www.mono-project.com/
 [5] http://www.ssw.uni-linz.ac.at/Research/Projects/Coco/
 [6] http://www.cs.washington.edu/research/constraints/
