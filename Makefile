@@ -6,7 +6,7 @@
 # Author: Jo Vermeulen <jo.vermeulen@uhasselt.be>
 
 SRC_DIR = Cassowary
-WARN_LEVEL = 1
+WARN_LEVEL = 4
 COCO_CS = cococs
 COCO_CS_FRAMEDIR = ${SRC_DIR}/Parsing/
 

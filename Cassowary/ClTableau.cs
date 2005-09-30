@@ -48,7 +48,7 @@ namespace Cassowary
     /// </summary>
     public /*sealed*/ void NoteRemovedVariable(ClAbstractVariable v, ClAbstractVariable subject)
     { 
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("NoteRemovedVariable: {0}, {1}", v, subject));
 
       if (subject != null) {
@@ -62,7 +62,7 @@ namespace Cassowary
     /// </summary>
     public /*sealed*/ void NoteAddedVariable(ClAbstractVariable v, ClAbstractVariable subject)
     { 
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("NoteAddedVariable: {0}, {1}", v, subject));
       if (subject != null) {
         InsertColVar(v, subject);
@@ -132,7 +132,7 @@ namespace Cassowary
     // (also, expr better be allocated on the heap!).
     protected /*sealed*/ void AddRow(ClAbstractVariable var, ClLinearExpression expr)
     {
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint("AddRow: " + var + ", " + expr);
 
       // for each variable in expr, add var to the set of rows which
@@ -154,7 +154,7 @@ namespace Cassowary
         _externalRows.Add(var);
       }
 
-      if (cTraceOn) 
+      if (Trace) 
         TracePrint(this.ToString());
     }
 
@@ -164,7 +164,7 @@ namespace Cassowary
     /// </summary>
     protected /*sealed*/ void RemoveColumn(ClAbstractVariable var)
     {
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("RemoveColumn: {0}", var));
       // remove the rows with the variables in varset
 
@@ -178,7 +178,7 @@ namespace Cassowary
           expr.Terms.Remove(var);
         }
       } else {
-        if (cTraceOn) 
+        if (Trace) 
           DebugPrint(string.Format("Could not find var {0} in _columns", var));
       }
           
@@ -195,7 +195,7 @@ namespace Cassowary
     protected /*sealed*/ ClLinearExpression RemoveRow(ClAbstractVariable var)
       /*throws ExCLInternalError*/
     {
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("RemoveRow: {0}", var));
 
       ClLinearExpression expr = (ClLinearExpression) _rows[var];
@@ -210,7 +210,7 @@ namespace Cassowary
         
         if (varset != null) 
         {
-          if (cTraceOn) 
+          if (Trace) 
             DebugPrint(string.Format("removing from varset {0}", var));
           
           varset.Remove(var);
@@ -224,7 +224,7 @@ namespace Cassowary
       }
 
       _rows.Remove(var);
-      if (cTraceOn) 
+      if (Trace) 
         FnExitPrint(string.Format("returning {0}", expr));
       
       return expr;
@@ -236,9 +236,9 @@ namespace Cassowary
     /// </summary> 
     protected /*sealed*/ void SubstituteOut(ClAbstractVariable oldVar, ClLinearExpression expr)
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint(string.Format("SubstituteOut: {0}", oldVar, expr));
-      if (cTraceOn) 
+      if (Trace) 
         TracePrint(this.ToString());
           
       Set varset = (Set) _columns[oldVar];
@@ -286,7 +286,7 @@ namespace Cassowary
 
     protected /*sealed*/ ClLinearExpression RowExpression(ClAbstractVariable v)
     {
-      // if (cTraceOn) FnEnterPrint(string.Format("rowExpression: {0}", v));
+      // if (Trace) FnEnterPrint(string.Format("rowExpression: {0}", v));
       return (ClLinearExpression) _rows[v];
     }
 

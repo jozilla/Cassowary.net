@@ -28,7 +28,7 @@ namespace Cassowary
   {
     public ClLinearExpression(ClAbstractVariable clv, double value, double constant)
     {
-      if (Cl.cGC)
+      if (Cl.GC)
       {
         #if !COMPACT
           Console.Error.WriteLine("new ClLinearExpression");
@@ -61,7 +61,7 @@ namespace Cassowary
     /// </summary>
     protected ClLinearExpression(ClDouble constant, Hashtable terms)
     {
-      if (Cl.cGC)
+      if (Cl.GC)
       {
         #if !COMPACT
           Console.Error.WriteLine("clone ClLinearExpression");
@@ -226,7 +226,7 @@ namespace Cassowary
     public /*sealed*/ ClLinearExpression AddVariable(ClAbstractVariable v, double c)
     { 
       // body largely duplicated below
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("AddVariable: {0}, {1}", v, c));
 
       ClDouble coeff = (ClDouble) _terms[v];
@@ -284,7 +284,7 @@ namespace Cassowary
       ClAbstractVariable subject, ClTableau solver)
     { 
       // body largely duplicated above
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("AddVariable: {0}, {1}, {2}, ...", v, c, subject));
 
       ClDouble coeff = (ClDouble) _terms[v];
@@ -350,9 +350,9 @@ namespace Cassowary
     public /*sealed*/ void SubstituteOut(ClAbstractVariable var, ClLinearExpression expr, 
       ClAbstractVariable subject, ClTableau solver)
     {
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("CLE:SubstituteOut: {0}, {1}, {2}, ...", var, expr, subject));
-      if (cTraceOn) 
+      if (Trace) 
         TracePrint("this = " + this);
 
       double multiplier = ((ClDouble) _terms[var]).Value;
@@ -387,7 +387,7 @@ namespace Cassowary
         }
       }
 
-      if (cTraceOn) 
+      if (Trace) 
         TracePrint("Now this is " + this);
     }
 
@@ -438,7 +438,7 @@ namespace Cassowary
     /// </summary>
     public /*sealed*/ double NewSubject(ClAbstractVariable subject)
     {
-      if (cTraceOn) 
+      if (Trace) 
         FnEnterPrint(string.Format("newSubject: {0}", subject));
       
       ClDouble coeff = (ClDouble) _terms[subject];

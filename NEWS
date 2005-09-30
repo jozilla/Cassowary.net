@@ -2,6 +2,9 @@
   * Added constraint rule parsing support. Is compiled into new
     Cassowary.Parsing assembly. Generating the parser requires Coco/R.
   * The assemblies are now strongly named by signing them with key files.
+  * The 'Trace', 'Debug' and 'GC' flags can now be set with properties, and
+    are no constants anymore. This eliminates unreachable code warnings and
+    improves the quality of the code.
 
 0.1.1 -- 2005-07-31:
   * Trace prints now use Cl.ArrayListToString() and Cl.HashtableToString() 

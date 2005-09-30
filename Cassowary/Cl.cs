@@ -30,9 +30,9 @@ namespace Cassowary
 	/// </summary>
 	public class Cl
 	{
-		protected const bool cDebugOn = false;
-		protected const bool cTraceOn = false;
-		protected const bool cGC = false;
+		protected static bool _debug = false;
+		protected static bool _trace = false;
+		protected static bool _gc = false;
 
 		protected static void DebugPrint(string s)
 		{
@@ -251,5 +251,23 @@ namespace Cassowary
 		  result += "}";
 		  return result;
 		}
+
+    public static bool Debug 
+    {
+      get { return _debug; }
+      set { _debug = value; }
+    }
+
+    public static bool Trace 
+    {
+      get { return _trace; }
+      set { _trace = value; }
+    }
+
+    public static bool GC 
+    {
+      get { return _gc; }
+      set { _gc = value; }
+    }
 	}
 }

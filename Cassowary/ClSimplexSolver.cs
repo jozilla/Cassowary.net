@@ -59,7 +59,7 @@ namespace Cassowary
       _stkCedcns = new Stack();
       _stkCedcns.Push(0);
 
-      if (cTraceOn)
+      if (Trace)
         TracePrint("objective expr == " + RowExpression(_objective));
     }
 
@@ -103,7 +103,7 @@ namespace Cassowary
     public ClSimplexSolver AddConstraint(ClConstraint cn)
       /* throws ExClRequiredFailure, ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("AddConstraint: " + cn);
 
       ArrayList eplus_eminus = new ArrayList(2);
@@ -159,7 +159,7 @@ namespace Cassowary
     /// </summary>
     public bool AddConstraintNoException(ClConstraint cn)
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("AddConstraintNoException: " + cn);
 
       try
@@ -319,7 +319,7 @@ namespace Cassowary
     public ClSimplexSolver AddPointStays(ArrayList listOfPoints)
       /* throws ExClRequiredFailure, ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("AddPointStays: " + listOfPoints);
       
       double weight = 1.0;
@@ -418,7 +418,7 @@ namespace Cassowary
     public ClSimplexSolver RemoveConstraint(ClConstraint cn)
       /* throws ExClRequiredFailure, ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
       {
         FnEnterPrint("RemoveConstraint: " + cn);
         TracePrint(this.ToString());
@@ -431,7 +431,7 @@ namespace Cassowary
       ClLinearExpression zRow = RowExpression(_objective);
 
       Set eVars = (Set) _errorVars[cn];
-      if (cTraceOn)
+      if (Trace)
         TracePrint("eVars == " + eVars);
 
       if (eVars != null)
@@ -463,7 +463,7 @@ namespace Cassowary
         throw new ExClConstraintNotFound();
       }
 
-      if (cTraceOn)
+      if (Trace)
         TracePrint("Looking to remove var " + marker);
 
       if (RowExpression(marker) == null)
@@ -471,7 +471,7 @@ namespace Cassowary
         // not in the basis, so need to do some more work
         Set col = (Set) _columns[marker];
 
-        if (cTraceOn)
+        if (Trace)
           TracePrint("Must pivot -- columns are " + col);
 
         ClAbstractVariable exitVar = null;
@@ -483,7 +483,7 @@ namespace Cassowary
             ClLinearExpression expr = RowExpression(v);
             double coeff = expr.CoefficientFor(marker);
             
-            if (cTraceOn)
+            if (Trace)
               TracePrint("Marker " + marker + "'s coefficient in " + expr + " is " + coeff);
 
             if (coeff < 0.0)
@@ -500,7 +500,7 @@ namespace Cassowary
 
         if (exitVar == null)
         {
-          if (cTraceOn)
+          if (Trace)
             TracePrint("exitVar is still null");
           
           foreach (ClAbstractVariable v in col)
@@ -607,7 +607,7 @@ namespace Cassowary
     public void Reset()
       /* throws ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("Reset");
       throw new ExClInternalError("Reset not implemented");
     }
@@ -627,7 +627,7 @@ namespace Cassowary
     public void Resolve(ArrayList newEditConstants)
       /* throws ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("Resolve " + newEditConstants);
       
       foreach (ClVariable v in _editVarMap.Keys)
@@ -668,7 +668,7 @@ namespace Cassowary
     public void Resolve()
       /* throws ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("Resolve()");
 
       DualOptimize();
@@ -689,7 +689,7 @@ namespace Cassowary
     public ClSimplexSolver SuggestValue(ClVariable v, double x)
       /* throws ExClError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("SuggestValue(" + v + ", " + x + ")");
 
       ClEditInfo cei = (ClEditInfo) _editVarMap[v];
@@ -793,7 +793,7 @@ namespace Cassowary
           throw new ExClInternalError("Error in AddVar -- required failure is impossible");
         }
         
-        if (cTraceOn)
+        if (Trace)
           TracePrint("added initial stay on " + v);
       }
 
@@ -865,27 +865,27 @@ namespace Cassowary
     protected void AddWithArtificialVariable(ClLinearExpression expr)
       /* throws ExClRequiredFailure, ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("AddWithArtificialVariable: " + expr);
 
       ClSlackVariable av = new ClSlackVariable(++_artificialCounter, "a");
       ClObjectiveVariable az = new ClObjectiveVariable("az");
       ClLinearExpression azRow = (ClLinearExpression) expr.Clone();
       
-      if (cTraceOn)
+      if (Trace)
         TracePrint("before AddRows:\n" + this);
 
       AddRow(az, azRow);
       AddRow(av, expr);
 
-      if (cTraceOn)
+      if (Trace)
         TracePrint("after AddRows:\n" + this);
       
       Optimize(az);
 
       ClLinearExpression azTableauRow = RowExpression(az);
 
-      if (cTraceOn)
+      if (Trace)
         TracePrint("azTableauRow.Constant == " + azTableauRow.Constant);
 
       if (!Cl.Approx(azTableauRow.Constant, 0.0))
@@ -933,13 +933,13 @@ namespace Cassowary
     protected bool TryAddingDirectly(ClLinearExpression expr)
       /* throws ExClRequiredFailure */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("TryAddingDirectly: " + expr);
 
       ClAbstractVariable subject = ChooseSubject(expr);
       if (subject == null)
       {
-        if (cTraceOn)
+        if (Trace)
           FnExitPrint("returning false");
         return false;
       }
@@ -949,7 +949,7 @@ namespace Cassowary
         SubstituteOut(subject, expr);
       }
       AddRow(subject, expr);
-      if (cTraceOn)
+      if (Trace)
         FnExitPrint("returning true");
       return true; // succesfully added directly
     }
@@ -973,7 +973,7 @@ namespace Cassowary
     protected ClAbstractVariable ChooseSubject(ClLinearExpression expr)
       /* ExClRequiredFailure */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("ChooseSubject: " + expr);
 
       ClAbstractVariable subject = null; // the current best subject, if any
@@ -1054,7 +1054,7 @@ namespace Cassowary
                                                ArrayList eplus_eminus,
                                                ClDouble prevEConstant)
     {
-      if (cTraceOn)
+      if (Trace)
       {
         FnEnterPrint("NewExpression: " + cn);
         TracePrint("cn.IsInequality == " + cn.IsInequality);
@@ -1105,7 +1105,7 @@ namespace Cassowary
           dummyVar = new ClDummyVariable(_dummyCounter, "d");
           expr.SetVariable(dummyVar, 1.0);
           _markerVars.Add(cn, dummyVar);
-          if (cTraceOn)
+          if (Trace)
             TracePrint("Adding dummyVar == d" + _dummyCounter);
         }
         else
@@ -1122,7 +1122,7 @@ namespace Cassowary
           double swCoeff = sw.AsDouble();
           if (swCoeff == 0)
           {
-            if (cTraceOn)
+            if (Trace)
             {
               TracePrint("sw == " + sw);
               TracePrint("cn == " + cn);
@@ -1152,7 +1152,7 @@ namespace Cassowary
       if (expr.Constant < 0)
         expr.MultiplyMe(-1);
 
-      if (cTraceOn)
+      if (Trace)
         FnExitPrint("returning " + expr);
 
       return expr;
@@ -1167,7 +1167,7 @@ namespace Cassowary
     protected void Optimize(ClObjectiveVariable zVar)
       /* throws ExClInternalError */
     {
-      if (cTraceOn) 
+      if (Trace) 
       {
         FnEnterPrint("Optimize: " + zVar);
         TracePrint(this.ToString());
@@ -1192,7 +1192,7 @@ namespace Cassowary
         }
         if (objectiveCoeff >= -_epsilon || entryVar == null)
           return;
-        if (cTraceOn)
+        if (Trace)
           TracePrint("entryVar == " + entryVar + ", objectiveCoeff == " + objectiveCoeff);
 
         double minRatio = Double.MaxValue;
@@ -1200,20 +1200,20 @@ namespace Cassowary
         double r = 0.0;
         foreach (ClAbstractVariable v in columnVars)
         {
-          if (cTraceOn)
+          if (Trace)
             TracePrint("Checking " + v);
           if (v.IsPivotable)
           {
             ClLinearExpression expr = RowExpression(v);
             double coeff = expr.CoefficientFor(entryVar);
-            if (cTraceOn)
+            if (Trace)
               TracePrint("pivotable, coeff == " + coeff);
             if (coeff < 0.0)
             {
               r = - expr.Constant / coeff;
               if (r < minRatio)
               {
-                if (cTraceOn)
+                if (Trace)
                   TracePrint("New minRatio == " + r);
                 minRatio = r;
                 exitVar = v;
@@ -1226,7 +1226,7 @@ namespace Cassowary
           throw new ExClInternalError("Objective function is unbounded in Optimize");
         }
         Pivot(entryVar, exitVar);
-        if (cTraceOn)
+        if (Trace)
           TracePrint(this.ToString());
       }
     }
@@ -1256,7 +1256,7 @@ namespace Cassowary
                                      ClAbstractVariable plusErrorVar,
                                      ClAbstractVariable minusErrorVar)
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("DeltaEditConstant :" + delta + ", " 
             + plusErrorVar + ", " + minusErrorVar);
 
@@ -1307,7 +1307,7 @@ namespace Cassowary
     protected void DualOptimize()
       /* throws ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("DualOptimize: ");
 
       ClLinearExpression zRow = RowExpression(_objective);
@@ -1363,7 +1363,7 @@ namespace Cassowary
                          ClAbstractVariable exitVar)
       /* throws ExClInternalError */
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("Pivot: " + entryVar + ", " + exitVar);
 
       // the entryVar might be non-pivotable if we're doing a 
@@ -1397,7 +1397,7 @@ namespace Cassowary
     /// </remarks>
     protected void ResetStayConstants()
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("ResetStayConstants");
 
       for (int i = 0; i < _stayPlusErrorVars.Count; i++)
@@ -1425,9 +1425,9 @@ namespace Cassowary
     /// </remarks>
     protected void SetExternalVariables()
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("SetExternalVariables:");
-      if (cTraceOn)
+      if (Trace)
         TracePrint(this.ToString());
 
       foreach (ClVariable v in _externalParametricVars)
@@ -1449,9 +1449,9 @@ namespace Cassowary
       foreach (ClVariable v in _externalRows)
       {
         ClLinearExpression expr = RowExpression(v);
-        if (cTraceOn)
+        if (Trace)
           DebugPrint("v == " + v);
-        if (cTraceOn)
+        if (Trace)
           DebugPrint("expr == " + expr);
         v.ChangeValue(expr.Constant);
       }
@@ -1465,7 +1465,7 @@ namespace Cassowary
     /// </summary>
     protected void InsertErrorVar(ClConstraint cn, ClAbstractVariable var)
     {
-      if (cTraceOn)
+      if (Trace)
         FnEnterPrint("InsertErrorVar: " + cn + ", " + var);
 
       Set cnset = (Set) _errorVars[cn];

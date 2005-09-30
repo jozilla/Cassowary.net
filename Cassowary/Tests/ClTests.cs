@@ -360,7 +360,7 @@ namespace Cassowary.Tests
         } else {  
           rgpcns[j] = new ClLinearEquation(expr);
         }
-        if (cTraceOn) 
+        if (Trace) 
           TracePrint("Constraint " + j + " is " + rgpcns[j]);
       }
 
@@ -377,7 +377,7 @@ namespace Cassowary.Tests
         catch (ExClRequiredFailure err)
         {
           cExceptions++;
-          if (cTraceOn) 
+          if (Trace) 
             TracePrint("got exception adding " + rgpcns[j]);
           
           rgpcns[j] = null;
@@ -461,7 +461,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// JustStay1 ////////////////////////// 
@@ -474,7 +474,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// AddDelete1 ////////////////////////// 
@@ -486,7 +486,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// AddDelete2 ////////////////////////// 
@@ -498,7 +498,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// Casso1 ////////////////////////// 
@@ -510,7 +510,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// Inconsistent1 ////////////////////////// 
@@ -522,7 +522,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
       
       ////////////////////////// Inconsistent2 ////////////////////////// 
@@ -534,7 +534,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// Inconsistent3 ////////////////////////// 
@@ -546,7 +546,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// Multiedit ////////////////////////// 
@@ -558,7 +558,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
 
       ////////////////////////// AddDel ////////////////////////// 
@@ -582,7 +582,7 @@ namespace Cassowary.Tests
         Console.WriteLine("--> Failed!");
       else
         Console.WriteLine("--> Succeeded!");
-      if (cGC) 
+      if (GC) 
         Console.WriteLine("Num vars = " + ClAbstractVariable.NumCreated );
     }
 
