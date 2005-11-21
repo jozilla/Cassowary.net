@@ -1,41 +1,43 @@
 Cassowary.net README
 ====================
 
-Cassowary.net is a port of the Cassowary constraint solving toolkit [1] to 
-the .NET platform. It is based on the Java version by Greg J. Badros,
-which in turn is based on the Smalltalk version by Alan Borning.
+Cassowary.net is a port of the Cassowary constraint solving toolkit
+[1] to the .NET platform. It is based on the Java version by Greg
+J. Badros, which in turn is based on the Smalltalk version by Alan
+Borning.
 
 Copyright (C) 2005 Jo Vermeulen <jo.vermeulen@uhasselt.be>
 
-This software is licensed under the LGPL, see COPYING for more details.
+This software is licensed under the LGPL, see COPYING for more
+details.
 
 Feedback is always welcome!
 
 Context
 -------
 
-I originally created this software for my Masters thesis at the University
-of Hasselt [2]. More information about my Masters thesis can be found on my
-homepage [3].
+I originally created this software for my Masters thesis at the
+University of Hasselt [2]. More information about my Masters thesis
+can be found on my homepage [3].
 
 Dependencies
 ------------
 
-Cassowary.net only requires a .NET environment, such as the Microsoft .NET 
-platform, or the Mono implementation [4]. To compile Cassowary.net with 
-parsing support, the (freely available) Coco/R parser generator [5] is 
-required.
+Cassowary.net only requires a .NET environment, such as the Microsoft
+.NET platform, or the Mono implementation [4]. To compile
+Cassowary.net with parsing support, the (freely available) Coco/R
+parser generator [5] is required.
 
 Acknowledgements
 ----------------
 
-I would like to thank the people of the Constraints Research Group at the 
-University of Washington [6] for their original Cassowary solver.
-Special thanks go to Greg J. Badros for taking the time to answer my 
+I would like to thank the people of the Constraints Research Group at
+the University of Washington [6] for their original Cassowary solver.
+Special thanks go to Greg J. Badros for taking the time to answer my
 questions and providing useful insights in the behavior of the solver.
 
-Furthermore, I wish to thank Markus Löberbauer, one of the Coco/R developers,
-for helping me correct the constraint grammar.
+Furthermore, I wish to thank Markus Löberbauer, one of the Coco/R
+developers, for helping me correct the constraint grammar.
 
 ----
 [1] http://www.cs.washington.edu/research/constraints/cassowary/
