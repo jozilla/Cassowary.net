@@ -1,0 +1,3 @@
+#!/bin/sh
+gacutil /u Cassowary /gacdir /usr/lib
+gacutil /u Cassowary.Parsing /gacdir /usr/lib

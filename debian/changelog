@@ -1,0 +1,36 @@
+cassowarynet (0.2-20051207T143823) unstable; urgency=low
+
+  * Added dependency on mono-gac cause we need gacutil 
+
+ -- Panagiotis Issaris <takis@issaris.org>  Wed,  7 Dec 2005 14:38:23 +0100
+
+cassowarynet (0.2-20051207T142401) unstable; urgency=low
+
+  * Fixed typo in description
+
+ -- Panagiotis Issaris <takis@issaris.org>  Wed, 07 Dec 2005 14:24:01 +0100
+
+cassowarynet (0.2-20051207T140701) unstable; urgency=low
+
+  * Improved Debian package
+
+ -- Panagiotis Issaris <takis@issaris.org>  Wed, 07 Dec 2005 13:56:01 +0100
+
+cassowarynet (0.2-20051207T135601) unstable; urgency=low
+
+  * Improved GAC handling
+
+ -- Panagiotis Issaris <takis@issaris.org>  Wed, 07 Dec 2005 13:56:01 +0100
+
+cassowarynet (0.2-20051205T175351) unstable; urgency=low
+
+  * Update
+
+ -- Panagiotis Issaris <takis@issaris.org>  Mon, 05 Dec 2005 17:53:51 +0100
+
+cassowarynet (0.2-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Panagiotis Issaris <takis@issaris.org>  Mon,  5 Dec 2005 13:42:54 +0100
+
