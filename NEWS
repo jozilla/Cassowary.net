@@ -1,3 +1,8 @@
+0.2.1 -- 2006-02-16:
+  * Added debian/ directory, which is used to easily create an Ubuntu
+    Breezy package. Contributed by Panagiotis Issaris
+    <takis.issaris@uhasselt.be>.
+
 0.2 -- 2005-11-21:
   * Added constraint rule parsing support. Is compiled into new
     Cassowary.Parsing assembly. Generating the parser requires Coco/R.
