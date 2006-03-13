@@ -5,65 +5,68 @@ using System.Collections;
 using Cassowary;
 using Cassowary.Parsing;
 
-public class ClParser
+namespace Cassowary.Parsing
 {
-  private string _rule;
-  private ClConstraint _result = null;
-  private Hashtable _context;
-
-	public ClParser()
-	{
-		_context = new Hashtable();
-	}
-
-	public void Parse(string rule)
-	{
-		Rule = rule;
-		Parse();
-	}
-	
-  public void Parse()
+  public class ClParser
   {
-    UTF8Encoding ue = new UTF8Encoding();
-    byte[] ruleBytes = ue.GetBytes(Rule);
-    MemoryStream ms = new MemoryStream(ruleBytes);
+    private string _rule;
+    private ClConstraint _result = null;
+    private Hashtable _context;
 
-    Scanner s = new Scanner(ms);
-    Parser p = new Parser(s);
-		p.Context = Context;
+    public ClParser()
+    {
+      _context = new Hashtable();
+    }
 
-    p.Parse();
+    public void Parse(string rule)
+    {
+      Rule = rule;
+      Parse();
+    }
     
-    _result = p.Value;
-		
-    if (p.errors.count > 0)
-      throw new ExClParseError(Rule);
-  }
+    public void Parse()
+    {
+      UTF8Encoding ue = new UTF8Encoding();
+      byte[] ruleBytes = ue.GetBytes(Rule);
+      MemoryStream ms = new MemoryStream(ruleBytes);
 
-	public void AddContext(params ClVariable[] vars)
-	{
-		foreach (ClVariable v in vars)
-			_context.Add(v.Name, v);
-	}
+      Scanner s = new Scanner(ms);
+      Parser p = new Parser(s);
+      p.Context = Context;
 
-	public void AddContext(Hashtable context)
-	{
-		_context = new Hashtable(context);
-	}
+      p.Parse();
+      
+      _result = p.Value;
+      
+      if (p.errors.count > 0)
+        throw new ExClParseError(Rule);
+    }
 
-  public string Rule
-  {
-    get { return _rule; }
-    set { _rule = value; }
-  }
-  
-  public ClConstraint Result
-  {
-    get { return _result; }
-  }
+    public void AddContext(params ClVariable[] vars)
+    {
+      foreach (ClVariable v in vars)
+        _context.Add(v.Name, v);
+    }
 
-  public Hashtable Context
-  {
-    get { return _context; }
+    public void AddContext(Hashtable context)
+    {
+      _context = new Hashtable(context);
+    }
+    
+    public string Rule
+    {
+      get { return _rule; }
+      set { _rule = value; }
+    }
+    
+    public ClConstraint Result
+    {
+      get { return _result; }
+    }
+
+    public Hashtable Context
+    {
+      get { return _context; }
+    }
   }
 }
