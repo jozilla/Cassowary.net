@@ -1,3 +1,6 @@
+0.2.2 -- 2006-03-16:
+  * Forgot to add ClParser to the Cassowary.Parsing namespace.
+
 0.2.1 -- 2006-02-16:
   * Added debian/ directory, which is used to easily create an Ubuntu
     Breezy package. Contributed by Panagiotis Issaris
