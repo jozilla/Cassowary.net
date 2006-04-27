@@ -1,3 +1,9 @@
+cassowarynet (0.2.2-1) unstable; urgency=low
+
+  * Updated to version 0.2.2
+
+ -- Jo Vermeulen <jo.vermeulen@uhasselt.be>  Thu, 27 Apr 2006 14:25:55 +0200
+
 cassowarynet (0.2-20051207T143823) unstable; urgency=low
 
   * Added dependency on mono-gac cause we need gacutil 

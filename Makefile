@@ -10,6 +10,21 @@ WARN_LEVEL = 4
 COCO_CS = cococs
 COCO_CS_FRAMEDIR = ${SRC_DIR}/Parsing/
 
+INSTALL=install
+INSTALL_PROGRAM=$(INSTALL)
+INSTALL_DATA=$(INSTALL) -m 644
+
+prefix=/usr
+exec_prefix=${prefix}
+bindir=${exec_prefix}/bin
+libdir=$(exec_prefix)/lib
+monolibdir=${libdir}/mono/1.0/
+#/usr/lib/mono/1.0/
+PACKAGE=cassowarynet
+
+GACUTIL=gacutil
+GACUTIL_FLAGS=/package $(PACKAGE) /gacdir $(DESTDIR)$(prefix)/lib
+
 all: lib tests parselib 
 
 lib:
@@ -38,3 +53,17 @@ parselib: lib
 clean:
 	rm -f *.dll *.exe 
 	rm -f ${SRC_DIR}/Parsing/Scanner.cs ${SRC_DIR}/Parsing/Scanner.cs.old ${SRC_DIR}/Parsing/Parser.cs ${SRC_DIR}/Parsing/Parser.cs.old
+
+
+install:
+	$(INSTALL) -d ${DESTDIR}${bindir}
+	$(INSTALL) -d ${DESTDIR}${monolibdir}
+	$(INSTALL_PROGRAM) ClTests.exe $(DESTDIR)$(bindir)/ClTests.exe
+	$(INSTALL_PROGRAM) LayoutTest.exe $(DESTDIR)$(bindir)/LayoutTest.exe
+	$(INSTALL_PROGRAM) Cassowary.dll $(DESTDIR)$(monolibdir)/Cassowary.dll
+	$(INSTALL_PROGRAM) Cassowary.Parsing.dll $(DESTDIR)$(monolibdir)/Cassowary.Parsing.dll
+
+register:
+	$(GACUTIL) /i Cassowary.dll /f $(GACUTIL_FLAGS) || exit 1;
+	$(GACUTIL) /i Cassowary.Parsing.dll /f $(GACUTIL_FLAGS) || exit 1;
+
