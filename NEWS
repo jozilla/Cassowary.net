@@ -1,3 +1,8 @@
+0.2.3 -- not released yet:
+  * Migrated to Bazaar for revision control
+  * Added instructions to build a Debian or Ubuntu package to the
+    INSTALL file.
+
 0.2.2 -- 2006-03-16:
   * Forgot to add ClParser to the Cassowary.Parsing namespace.
 

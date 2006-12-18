@@ -2,8 +2,13 @@ Notes
 -----
 
 These installation instructions are for UNIX systems.  You will need a
-recent version of Mono and the Mono C# compiler. In order to compile
-the constraint parsing library, you need the Coco/R parser generator.
+recent version of Mono and the Mono C# compiler. 
+
+In order to compile the constraint parsing library, you need the
+Coco/R parser generator. To install Coco/R on Debian or Ubuntu
+systems, add this line to your /etc/apt/sources.list:
+
+deb http://www.ssw.uni-linz.ac.at/Research/Projects/Coco/packages ./
 
 Usage
 -----
@@ -11,8 +16,8 @@ Usage
 To use the library, place it in your project directory and link with
 it.
 
-How to build
-------------
+Build instructions
+------------------
 
 To build the Cassowary.dll library, run:
 
@@ -42,3 +47,9 @@ Or to build both the libraries and the tests, just type:
 
 $ make
 
+Building a Debian/Ubuntu package
+--------------------------------
+
+To create a Debian or Ubuntu package, run:
+
+$ dpkg-buildpackage
