@@ -88,11 +88,7 @@ namespace Cassowary
 
     public override sealed int GetHashCode()
     {
-      #if !COMPACT 
-        Console.Error.WriteLine("ClDouble.GetHashCode() called!");
-      #else
-        Console.WriteLine("ClDouble.GetHashCode() called!");
-      #endif
+      Console.Error.WriteLine("ClDouble.GetHashCode() called!");
       
       return _value.GetHashCode();
     }

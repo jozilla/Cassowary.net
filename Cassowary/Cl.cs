@@ -36,38 +36,22 @@ namespace Cassowary
 
 		protected static void DebugPrint(string s)
 		{
-			#if !COMPACT
-			  Console.Error.WriteLine(s);
-			#else
-			  Console.WriteLine(s);
-			#endif
+			Console.Error.WriteLine(s);
 		}
 
 		protected static void TracePrint(string s)
 		{
-			#if !COMPACT
-			  Console.Error.WriteLine(s);
-			#else
-			  Console.WriteLine(s);
-			#endif
+			Console.Error.WriteLine(s);
 		}
 
 		protected static void FnEnterPrint(string s)
 		{
-			#if !COMPACT
-			  Console.Error.WriteLine("* {0}", s);
-			#else
-			  Console.WriteLine("* {0}", s);
-			#endif
+			Console.Error.WriteLine("* {0}", s);
 		}
 		
 		protected static void FnExitPrint(string s)
 		{
-			#if !COMPACT
-			  Console.Error.WriteLine("- {0}", s);
-			#else
-			  Console.WriteLine("- {0}", s);
-			#endif
+			Console.Error.WriteLine("- {0}", s);
 		}
 		
 		protected void Assert(bool f, string description)

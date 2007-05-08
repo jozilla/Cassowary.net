@@ -28,124 +28,132 @@ Coco/R itself) does not fall under the GNU General Public License.
 using System;
 
 -->namespace
-namespace Cassowary.Parsing
-{
 
-  public class Parser {
-  -->constants
-    const bool T = true;
-    const bool x = false;
-    const int minErrDist = 2;
-    
-    public Scanner scanner;
-    public Errors  errors;
+public class Parser {
+-->constants
+	const bool T = true;
+	const bool x = false;
+	const int minErrDist = 2;
+	
+	public Scanner scanner;
+	public Errors  errors;
 
-    public Token t;    // last recognized token
-    public Token la;   // lookahead token
-    int errDist = minErrDist;
+	public Token t;    // last recognized token
+	public Token la;   // lookahead token
+	int errDist = minErrDist;
 
-  -->declarations
+-->declarations
 
-    public Parser(Scanner scanner) {
-      this.scanner = scanner;
-      errors = new Errors();
-    }
+	public Parser(Scanner scanner) {
+		this.scanner = scanner;
+		errors = new Errors();
+	}
 
-    void SynErr (int n) {
-      if (errDist >= minErrDist) errors.SynErr(la.line, la.col, n);
-      errDist = 0;
-    }
+	void SynErr (int n) {
+		if (errDist >= minErrDist) errors.SynErr(la.line, la.col, n);
+		errDist = 0;
+	}
 
-    public void SemErr (string msg) {
-      if (errDist >= minErrDist) errors.Error(t.line, t.col, msg);
-      errDist = 0;
-    }
-    
-    void Get () {
-      for (;;) {
-        t = la;
-        la = scanner.Scan();
-        if (la.kind <= maxT) { ++errDist; break; }
-  -->pragmas
-        la = t;
-      }
-    }
-    
-    void Expect (int n) {
-      if (la.kind==n) Get(); else { SynErr(n); }
-    }
-    
-    bool StartOf (int s) {
-      return set[s, la.kind];
-    }
-    
-    void ExpectWeak (int n, int follow) {
-      if (la.kind == n) Get();
-      else {
-        SynErr(n);
-        while (!StartOf(follow)) Get();
-      }
-    }
-    
-    bool WeakSeparator (int n, int syFol, int repFol) {
-      bool[] s = new bool[maxT+1];
-      if (la.kind == n) { Get(); return true; }
-      else if (StartOf(repFol)) return false;
-      else {
-        for (int i=0; i <= maxT; i++) {
-          s[i] = set[syFol, i] || set[repFol, i] || set[0, i];
-        }
-        SynErr(n);
-        while (!s[la.kind]) Get();
-        return StartOf(syFol);
-      }
-    }
-    
-  -->productions
-
-    public void Parse() {
-      la = new Token();
-      la.val = "";		
-      Get();
-  -->parseRoot
-      Expect(0);
-    }
-    
-    bool[,] set = {
-  -->initialization
-    };
-  } // end Parser
+	public void SemErr (string msg) {
+		if (errDist >= minErrDist) errors.SemErr(t.line, t.col, msg);
+		errDist = 0;
+	}
+	
+	void Get () {
+		for (;;) {
+			t = la;
+			la = scanner.Scan();
+			if (la.kind <= maxT) { ++errDist; break; }
+-->pragmas
+			la = t;
+		}
+	}
+	
+	void Expect (int n) {
+		if (la.kind==n) Get(); else { SynErr(n); }
+	}
+	
+	bool StartOf (int s) {
+		return set[s, la.kind];
+	}
+	
+	void ExpectWeak (int n, int follow) {
+		if (la.kind == n) Get();
+		else {
+			SynErr(n);
+			while (!StartOf(follow)) Get();
+		}
+	}
 
 
-  public class Errors {
-    public int count = 0;                                    // number of errors detected
-    public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
-    
-    public void SynErr (int line, int col, int n) {
-      string s;
-      switch (n) {
-  -->errors
-        default: s = "error " + n; break;
-      }
-      Console.WriteLine(errMsgFormat, line, col, s);
-      count++;
-    }
+	bool WeakSeparator(int n, int syFol, int repFol) {
+		int kind = la.kind;
+		if (kind == n) {Get(); return true;}
+		else if (StartOf(repFol)) {return false;}
+		else {
+			SynErr(n);
+			while (!(set[syFol, kind] || set[repFol, kind] || set[0, kind])) {
+				Get();
+				kind = la.kind;
+			}
+			return StartOf(syFol);
+		}
+	}
 
-    public void SemErr (int line, int col, int n) {
-      Console.WriteLine(errMsgFormat, line, col, ("error " + n));
-      count++;
-    }
+	
+-->productions
 
-    public void Error (int line, int col, string s) {
-      Console.WriteLine(errMsgFormat, line, col, s);
-      count++;
-    }
+	public void Parse() {
+		la = new Token();
+		la.val = "";		
+		Get();
+-->parseRoot
+    Expect(0);
+	}
+	
+	bool[,] set = {
+-->initialization
+	};
+} // end Parser
 
-    public void Exception (string s) {
-      Console.WriteLine(s); 
-      System.Environment.Exit(1);
-    }
-  } // Errors
+
+public class Errors {
+	public int count = 0;                                    // number of errors detected
+	public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
+  public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
+  
+	public void SynErr (int line, int col, int n) {
+		string s;
+		switch (n) {
+-->errors
+			default: s = "error " + n; break;
+		}
+		errorStream.WriteLine(errMsgFormat, line, col, s);
+		count++;
+	}
+
+	public void SemErr (int line, int col, string s) {
+		errorStream.WriteLine(errMsgFormat, line, col, s);
+		count++;
+	}
+	
+	public void SemErr (string s) {
+		errorStream.WriteLine(s);
+		count++;
+	}
+	
+	public void Warning (int line, int col, string s) {
+		errorStream.WriteLine(errMsgFormat, line, col, s);
+	}
+	
+	public void Warning(string s) {
+		errorStream.WriteLine(s);
+	}
+} // Errors
+
+
+public class FatalError: Exception {
+	public FatalError(string m): base(m) {}
 }
 
 $$$

@@ -30,11 +30,7 @@ namespace Cassowary
     {
       if (Cl.GC)
       {
-        #if !COMPACT
-          Console.Error.WriteLine("new ClLinearExpression");
-        #else
-          Console.WriteLine("new ClLinearExpression");
-        #endif
+        Console.Error.WriteLine("new ClLinearExpression");
       }
 
       _constant = new ClDouble(constant);
@@ -63,11 +59,7 @@ namespace Cassowary
     {
       if (Cl.GC)
       {
-        #if !COMPACT
-          Console.Error.WriteLine("clone ClLinearExpression");
-        #else
-          Console.WriteLine("clone ClLinearExpression");
-        #endif
+        Console.Error.WriteLine("clone ClLinearExpression");
       }
       
       _constant = (ClDouble) constant.Clone();

@@ -2,6 +2,9 @@
   * Migrated to Bazaar for revision control
   * Added instructions to build a Debian or Ubuntu package to the
     INSTALL file.
+  * Migrated to .NET 2.0 and the December 2006 version of Coco/R
+  * The Compact .NET version is now identical to the full version, due
+  * to the switch to .NET 2.0.
 
 0.2.2 -- 2006-03-16:
   * Forgot to add ClParser to the Cassowary.Parsing namespace.

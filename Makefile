@@ -1,5 +1,5 @@
 # Makefile for Unix systems.
-# Requires mcs, the Mono C# compiler.
+# Requires gmcs, the Mono C# compiler.
 # For constraint parsing support, the Coco/R 
 # parser generator is needed.
 # 
@@ -29,25 +29,25 @@ all: lib tests parselib
 
 lib:
 	@echo "building cassowary library"
-	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
+	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 	@echo "done"
 
 tests: cltests layout_test
 
 cltests: lib
 	@echo "building cltests"
-	mcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.ClTests -out:ClTests.exe -r:Cassowary.dll ${SRC_DIR}/Tests/ClTests.cs ${SRC_DIR}/Tests/Timer.cs
+	gmcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.ClTests -out:ClTests.exe -r:Cassowary.dll ${SRC_DIR}/Tests/ClTests.cs ${SRC_DIR}/Tests/Timer.cs
 	@echo "done"
 
 layout_test: lib
 	@echo "building layout test"
-	mcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.LayoutTest -out:LayoutTest.exe -r:Cassowary.dll ${SRC_DIR}/Tests/LayoutTest.cs
+	gmcs -warn:${WARN_LEVEL} -target:exe -main:Cassowary.Tests.LayoutTest -out:LayoutTest.exe -r:Cassowary.dll ${SRC_DIR}/Tests/LayoutTest.cs
 	@echo "done"
 
 parselib: lib
 	@echo "building constraint parsing library"
 	${COCO_CS} -frames ${COCO_CS_FRAMEDIR} ${SRC_DIR}/Parsing/constraint_grammar.atg
-	mcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll -r:Cassowary.dll ${SRC_DIR}/Parsing/*.cs
+	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll -r:Cassowary.dll ${SRC_DIR}/Parsing/*.cs
 	@echo "done"
 
 clean:
