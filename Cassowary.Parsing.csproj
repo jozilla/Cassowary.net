@@ -33,7 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cassowary\Parsing\AssemblyInfo.cs" />
+    <Compile Include="Cassowary\Parsing\Properties\AssemblyInfo.cs" />
     <Compile Include="Cassowary\Parsing\ClParser.cs" />
     <Compile Include="Cassowary\Parsing\ExClParseError.cs" />
     <Compile Include="Cassowary\Parsing\Parser.cs" />
