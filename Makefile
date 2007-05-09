@@ -18,7 +18,7 @@ prefix=/usr
 exec_prefix=${prefix}
 bindir=${exec_prefix}/bin
 libdir=$(exec_prefix)/lib
-monolibdir=${libdir}/mono/1.0/
+monolibdir=${libdir}/mono/2.0/
 #/usr/lib/mono/1.0/
 PACKAGE=cassowarynet
 
