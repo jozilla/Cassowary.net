@@ -1,0 +1,79 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F01578A3-BA19-47E6-B333-40E41158658B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cassowary</RootNamespace>
+    <AssemblyName>Cassowary</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cassowary\AssemblyInfo.cs" />
+    <Compile Include="Cassowary\Cl.cs" />
+    <Compile Include="Cassowary\ClAbstractVariable.cs" />
+    <Compile Include="Cassowary\ClConstraint.cs" />
+    <Compile Include="Cassowary\ClDouble.cs" />
+    <Compile Include="Cassowary\ClDummyVariable.cs" />
+    <Compile Include="Cassowary\ClEditConstraint.cs" />
+    <Compile Include="Cassowary\ClEditInfo.cs" />
+    <Compile Include="Cassowary\ClEditOrStayConstraint.cs" />
+    <Compile Include="Cassowary\ClLinearConstraint.cs" />
+    <Compile Include="Cassowary\ClLinearEquation.cs" />
+    <Compile Include="Cassowary\ClLinearExpression.cs" />
+    <Compile Include="Cassowary\ClLinearInequality.cs" />
+    <Compile Include="Cassowary\ClObjectiveVariable.cs" />
+    <Compile Include="Cassowary\ClPoint.cs" />
+    <Compile Include="Cassowary\ClSimplexSolver.cs" />
+    <Compile Include="Cassowary\ClSlackVariable.cs" />
+    <Compile Include="Cassowary\ClStayConstraint.cs" />
+    <Compile Include="Cassowary\ClStrength.cs" />
+    <Compile Include="Cassowary\ClSymbolicWeight.cs" />
+    <Compile Include="Cassowary\ClTableau.cs" />
+    <Compile Include="Cassowary\ClVariable.cs" />
+    <Compile Include="Cassowary\ExClConstraintNotFound.cs" />
+    <Compile Include="Cassowary\ExClError.cs" />
+    <Compile Include="Cassowary\ExClInternalError.cs" />
+    <Compile Include="Cassowary\ExClNonlinearExpression.cs" />
+    <Compile Include="Cassowary\ExClNotEnoughStays.cs" />
+    <Compile Include="Cassowary\ExClRequiredFailure.cs" />
+    <Compile Include="Cassowary\ExClTooDifficult.cs" />
+    <Compile Include="Cassowary\Tests\Timer.cs" />
+    <Compile Include="Cassowary\Utils\Set.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Cassowary.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
