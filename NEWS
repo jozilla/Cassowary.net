@@ -1,4 +1,4 @@
-0.2.3 -- not released yet:
+0.2.3 -- 2006-05-09:
   * Migrated to Bazaar for revision control
   * Added instructions to build a Debian or Ubuntu package to the
     INSTALL file.
