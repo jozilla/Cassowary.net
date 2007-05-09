@@ -190,7 +190,7 @@ namespace Cassowary.Tests
         // no exception, we failed!
         return false;
       } 
-      catch (ExClRequiredFailure rf)
+      catch (ExClRequiredFailure)
       {
         // we want this exception to get thrown
         Console.WriteLine("-- got the exception");
@@ -212,7 +212,7 @@ namespace Cassowary.Tests
         // no exception, we failed!
         return false;
       } 
-      catch (ExClRequiredFailure err)
+      catch (ExClRequiredFailure)
       {
         // we want this exception to get thrown
         Console.WriteLine("-- got the exception");
@@ -286,7 +286,7 @@ namespace Cassowary.Tests
 
         return okResult;
       } 
-      catch (ExClRequiredFailure err)
+      catch (ExClRequiredFailure)
       {
         // we want this exception to get thrown
         Console.WriteLine("-- got the exception");
@@ -315,7 +315,7 @@ namespace Cassowary.Tests
         // no exception, we failed!
         return false;
       } 
-      catch (ExClRequiredFailure err)
+      catch (ExClRequiredFailure)
       {
         // we want this exception to get thrown
         Console.WriteLine("-- got the exception");
@@ -374,7 +374,7 @@ namespace Cassowary.Tests
         {
           solver.AddConstraint(rgpcns[j]);
         }
-        catch (ExClRequiredFailure err)
+        catch (ExClRequiredFailure)
         {
           cExceptions++;
           if (Trace) 

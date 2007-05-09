@@ -166,7 +166,8 @@ namespace Cassowary
       {
         AddConstraint(cn);
         return true;
-      } catch (ExClRequiredFailure rf)
+      } 
+      catch (ExClRequiredFailure)
       {
         return false;
       }
@@ -185,7 +186,7 @@ namespace Cassowary
         ClEditConstraint cnEdit = new ClEditConstraint(v, strength);
         return AddConstraint(cnEdit);
       }
-      catch (ExClRequiredFailure rf)
+      catch (ExClRequiredFailure)
       {
         // should not get this
         throw new ExClInternalError("Required failure when adding an edit variable");
@@ -300,7 +301,7 @@ namespace Cassowary
 
         return this;
       } 
-      catch (ExClConstraintNotFound cnf)
+      catch (ExClConstraintNotFound)
       {
         // should not get this
         throw new ExClInternalError("Constraint not found in RemoveEditVarsTo");
@@ -640,7 +641,8 @@ namespace Cassowary
           {
             SuggestValue(v, ((ClDouble) newEditConstants[i]).Value);
           }
-        } catch (ExClError e)
+        } 
+        catch (ExClError)
         {
           throw new ExClInternalError("Error during resolve");
         }
@@ -757,7 +759,7 @@ namespace Cassowary
         {
           SuggestValue(v, n);
         }
-        catch(ExClError e)
+        catch(ExClError)
         {
           // just added it above, so we shouldn't get an error
           throw new ExClInternalError("Error in SetEditedValue");
@@ -783,7 +785,7 @@ namespace Cassowary
         {
           AddStay(v);
         }
-        catch(ExClRequiredFailure rf)
+        catch(ExClRequiredFailure)
         {
           // cannot have a required failure, since we add w/ weak
           throw new ExClInternalError("Error in AddVar -- required failure is impossible");
