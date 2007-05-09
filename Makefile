@@ -29,7 +29,7 @@ all: lib tests parselib
 
 lib:
 	@echo "building cassowary library"
-	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll ${SRC_DIR}/Properties/AssemblyInfo.cs ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
+	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.dll -keyfile:Cassowary.snk ${SRC_DIR}/Properties/AssemblyInfo.cs ${SRC_DIR}/*.cs ${SRC_DIR}/Utils/*.cs
 	@echo "done"
 
 tests: cltests layout_test
@@ -47,7 +47,7 @@ layout_test: lib
 parselib: lib
 	@echo "building constraint parsing library"
 	${COCO_CS} -frames ${COCO_CS_FRAMEDIR} ${SRC_DIR}/Parsing/constraint_grammar.atg
-	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll -r:Cassowary.dll ${SRC_DIR}/Parsing/Properties/AssemblyInfo.cs ${SRC_DIR}/Parsing/*.cs
+	gmcs -warn:${WARN_LEVEL} -target:library -out:Cassowary.Parsing.dll -keyfile:Cassowary.Parsing.snk -r:Cassowary.dll ${SRC_DIR}/Parsing/Properties/AssemblyInfo.cs ${SRC_DIR}/Parsing/*.cs
 	@echo "done"
 
 clean:
