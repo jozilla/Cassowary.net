@@ -29,12 +29,12 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Cassowary-cf")]
-[assembly: AssemblyDescription("An incremental constraint solver for .NET")]
+[assembly: AssemblyTitle("Cassowary")]
+[assembly: AssemblyDescription("Cassowary.net core library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright (C) 2005-2006  Jo Vermeulen (jo.vermeulen@uhasselt.be)")]
+[assembly: AssemblyProduct("Cassowary.net")]
+[assembly: AssemblyCopyright("Copyright © 2005-2007  Jo Vermeulen (jo.vermeulen@uhasselt.be)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -30,11 +30,11 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Cassowary.Parsing")]
-[assembly: AssemblyDescription("Parsing support for Cassowary")]
+[assembly: AssemblyDescription("Cassowary.net parsing support library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright (C) 2005-2006  Jo Vermeulen (jo.vermeulen@uhasselt.be)")]
+[assembly: AssemblyProduct("Cassowary.net")]
+[assembly: AssemblyCopyright("Copyright © 2005-2007  Jo Vermeulen (jo.vermeulen@uhasselt.be)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
